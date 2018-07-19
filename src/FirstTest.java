@@ -11,6 +11,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.net.URL;
+import java.util.List;
 
 /**
  * Created by Inka on 18-Jul-18....
@@ -131,6 +132,39 @@ public class FirstTest {
                 textInSearchField);
     }
 
+    @Test
+    public void testReceiveAnySearchResultAndCancel()
+    {
+        waitForElementAndClick(
+                //By.id("org.wikipedia:id/page_list_item_title"),
+                By.id("org.wikipedia:id/search_container"),
+                "Cannot find Search Wikipedia input",
+                5);
+
+        waitForElementAndSendKeys(By.id("org.wikipedia:id/search_src_text"),
+                "Java",
+                "Cannot find Search.. input",
+                15);
+
+       WebElement element = waitForElementPresent(By.id("org.wikipedia:id/page_list_item_description"),
+                                                    "No articles by search 'Java'",
+                                                    25);
+       Assert.assertNotEquals("No articles by search 'Java'",element,null);
+      // System.out.println("element is null#1: " + (element.equals(null)));
+
+        waitForElementAndClick(By.id("org.wikipedia:id/search_close_btn"),
+                "Cannot find X - button",
+                5);
+
+        boolean bool = waitForElementNotPresent(By.id("org.wikipedia:id/page_list_item_title"),
+                                                "Search result is not empty",
+                                                15);
+        Assert.assertTrue("Search result is not empty",bool);
+
+    }
+
+
+
     private WebElement waitForElementPresent(By by, String errorMessage, long timeoutInSeconds)
     {
         WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
@@ -172,5 +206,13 @@ public class FirstTest {
         WebElement element = waitForElementPresent(by, errorMessage,timeoutInSeconds);
         element.clear();
         return element;
+    }
+
+
+    private List<WebElement> waitForAllElements(By by, String textForSearch, String errorMessage, long timeoutInSeconds) {
+        WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
+        wait.withMessage(errorMessage + "\n");
+        return wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(by));
+        //By.id("org.wikipedia:id/page_list_item_title")
     }
 }
