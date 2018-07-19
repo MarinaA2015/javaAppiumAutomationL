@@ -163,6 +163,34 @@ public class FirstTest {
 
     }
 
+    @Test
+    public void testReceiveAllSearchResultAndVerifyThem()
+    {
+        String word = "Java";
+        waitForElementAndClick(
+                By.id("org.wikipedia:id/search_container"),
+                "Cannot find Search Wikipedia input",
+                5);
+
+        waitForElementAndSendKeys(By.id("org.wikipedia:id/search_src_text"),
+                word,
+                "Cannot find Search.. input",
+                15);
+
+        List<WebElement> listElements = waitForAllElementsPresent(By.id("org.wikipedia:id/page_list_item_title"),
+                                                                word,
+                                                                "Not all articles by search '" + word +"'",
+                                                                25);
+        int counter = 0;
+        int length = listElements.size();
+        for(int i=0; i < length; i++){
+            if(listElements.get(i).getAttribute("text").toLowerCase().contains(word.toLowerCase())) counter++;
+            //System.out.println(listElements.get(i).getAttribute("text").toLowerCase());
+        }
+
+        Assert.assertEquals("Search result is not correct", counter,length);
+    }
+
 
 
     private WebElement waitForElementPresent(By by, String errorMessage, long timeoutInSeconds)
@@ -209,7 +237,7 @@ public class FirstTest {
     }
 
 
-    private List<WebElement> waitForAllElements(By by, String textForSearch, String errorMessage, long timeoutInSeconds) {
+    private List<WebElement> waitForAllElementsPresent(By by, String textForSearch, String errorMessage, long timeoutInSeconds) {
         WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
         wait.withMessage(errorMessage + "\n");
         return wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(by));
