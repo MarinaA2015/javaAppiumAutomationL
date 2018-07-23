@@ -11,6 +11,9 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -164,7 +167,7 @@ public class FirstTest {
     }
 
     @Test
-    public void testReceiveAllSearchResultAndVerifyThem()
+    public void testEx4_ReceiveAllSearchResultAndVerifyThem()
     {
         String word = "Java";
         waitForElementAndClick(
@@ -183,12 +186,14 @@ public class FirstTest {
                                                                 25);
         int counter = 0;
         int length = listElements.size();
+        List<String> listError = new LinkedList<>();
         for(int i=0; i < length; i++){
             if(listElements.get(i).getAttribute("text").toLowerCase().contains(word.toLowerCase())) counter++;
+            else listError.add(listElements.get(i).getAttribute("text"));
             //System.out.println(listElements.get(i).getAttribute("text").toLowerCase());
         }
 
-        Assert.assertEquals("Search result is not correct", counter,length);
+        Assert.assertEquals("Some search results are not contains the word: " + Arrays.toString(new List[]{listError}), counter,length);
     }
 
 
