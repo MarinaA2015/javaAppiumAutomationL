@@ -133,7 +133,7 @@ public class FirstTest {
     }
 
     @Test
-    public void testReceiveAnySearchResultAndCancel()
+    public void testEx3_ReceiveAnySearchResultAndCancel()
     {
         waitForElementAndClick(
                 //By.id("org.wikipedia:id/page_list_item_title"),
@@ -156,10 +156,10 @@ public class FirstTest {
                 "Cannot find X - button",
                 5);
 
-        boolean bool = waitForElementNotPresent(By.id("org.wikipedia:id/page_list_item_title"),
+        waitForElementNotPresent(By.id("org.wikipedia:id/page_list_item_title"),
                                                 "Search result is not empty",
                                                 15);
-        Assert.assertTrue("Search result is not empty",bool);
+        //Assert.assertTrue("Search result is not empty",bool);
 
     }
 
