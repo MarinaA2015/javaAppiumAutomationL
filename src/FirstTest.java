@@ -116,7 +116,7 @@ public class FirstTest {
     }
 
     @Test
-    public void testTextSearchPresentInSearchField(){
+    public void testEx2_TextSearchPresentInSearchField(){
         waitForElementAndClick(By.id("org.wikipedia:id/search_container"),
                 "Cannot find Search Wikipedia input",
                 5);
