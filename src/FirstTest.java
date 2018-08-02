@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Inka on 18-Jul-18....
@@ -32,7 +33,7 @@ public class FirstTest {
         DesiredCapabilities capabilities =new DesiredCapabilities();
         capabilities.setCapability("platformName","Android");
         capabilities.setCapability("deviceName","AndroidTestDvice");
-        capabilities.setCapability("platformVersion","8.0");
+        capabilities.setCapability("platformVersion","6.0");
         capabilities.setCapability("automationName","Appium");
         capabilities.setCapability("appPackage","org.wikipedia");
         capabilities.setCapability("appActivity","main.MainActivity");
@@ -289,6 +290,8 @@ public class FirstTest {
                 "cannot find OK option ",
                 5);
 
+       // driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+
         waitForElementAndClick(
                 By.xpath("//android.widget.ImageButton[@content-desc = 'Navigate up']"),
                 "Cannot close article, cannot find X",
@@ -302,7 +305,7 @@ public class FirstTest {
         waitForElementAndClick(
                 By.xpath("//*[@text = 'Learning Programming']"),
                 "cannot find '" + name_of_folder + "' folder",
-                5);
+                15);
        /* waitForElementPresent(
                 By.xpath("//*[@text = 'object-oriented programming language']"),
                 "cannot find object-oriented programming language topic in my folder",
@@ -383,6 +386,80 @@ public class FirstTest {
 
     }
 
+    @Test
+    public void Ex5_SaveTwoArticlesToMyList()
+    {
+        String search_by_text1 = "Java";
+        String search_by_text2 = "Oracle";
+        String article1_name = "JavaScript";
+        String article2_name = "Oracle Database";
+
+        String name_of_folder = "Learning Programming";
+
+        // Searching of the article by text "Java"
+        searchArticleAndOpenIt(search_by_text1, article1_name);
+
+        // Adding of the opened article to the first folder with the name "Learning Programming"
+       addingArticleToFirstFolder(name_of_folder);
+
+        // Exit from the article
+        waitForElementAndClick(
+                By.xpath("//android.widget.ImageButton[@content-desc = 'Navigate up']"),
+                "Cannot close article '" + article1_name + "', cannot find X",
+                15);
+
+        // Searching the second article by text "Oracle"
+        searchArticleAndOpenIt(search_by_text2, article2_name);
+
+        //Adding the article to the existent folder "Learning Programming"
+        addingArticleToExistentFolder(name_of_folder);
+
+        // Exit from the article
+
+        waitForElementAndClick(
+                By.xpath("//android.widget.ImageButton[@content-desc = 'Navigate up']"),
+                "Cannot close article '" + article2_name + "', cannot find X",
+                15);
+
+        //Open 'Learning Programming' list
+        waitForElementAndClick(
+                By.xpath("//android.widget.FrameLayout[@content-desc = 'My lists']"),
+                "Cannot find navigation button to My List",
+                15);
+
+        waitForElementAndClick(
+                By.xpath("//*[@text = '" + name_of_folder + "']"),
+                "cannot find '" + name_of_folder + "' folder",
+                5);
+
+        swipeElementToLeft(
+                By.xpath("//*[@text = '" + article1_name + "']"),
+                "cannot find saved article");
+
+
+        waitForElementNotPresent(
+                By.xpath("//*[@text = '" + article1_name + "']"),
+                "the saved article wasn't deleted from the list",
+                15);
+
+        waitForElementAndClick(
+                By.xpath("//*[@text = '" + article2_name + "']"),
+                "cannot find the article with name '" + article2_name + "'",
+                15);
+
+
+       WebElement element = waitForElementPresent(By.id("org.wikipedia:id/view_page_title_text"),
+                "Cannot find article title",
+                25);
+
+       System.out.println("Name of the article: " + element.getText());
+
+       Assert.assertTrue(element.getText().equals(article2_name));
+
+    }
+
+
+
     private WebElement waitForElementPresent(By by, String errorMessage, long timeoutInSeconds)
     {
         WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
@@ -415,7 +492,6 @@ public class FirstTest {
     {
         WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
         wait.withMessage(errorMessage + "\n");
-        //By by = By.id(id);
         return wait.until(ExpectedConditions.invisibilityOfElementLocated(by));
     }
 
@@ -448,6 +524,82 @@ public class FirstTest {
         }
 
     }
+
+    private void searchArticleAndOpenIt(String search_by_text, String article_name)
+    {
+        waitForElementAndClick(By.id("org.wikipedia:id/search_container"),
+                "Cannot find Search Wikipedia input",
+                5);
+
+        waitForElementAndSendKeys(By.id("org.wikipedia:id/search_src_text"),
+                search_by_text,
+                "Cannot find Search.. input",
+                5);
+
+        waitForElementAndClick(By.xpath("//*[@resource-id = 'org.wikipedia:id/page_list_item_container']//*[@text = '" + article_name +"']"),
+                "Cannot find " + article_name + " topic searching by" +  search_by_text,
+                15);
+
+        waitForElementPresent(By.id("org.wikipedia:id/view_page_title_text"),
+                "Cannot find article title",
+                30);
+    }
+
+    private void addingArticleToFirstFolder(String name_of_folder)
+    {
+        waitForElementAndClick(
+                By.xpath("//android.widget.ImageView[@content-desc = 'More options']"),
+                "cannot find button to open article options",
+                5);
+
+        waitForElementAndClick(
+                By.xpath("//*[@text = 'Add to reading list']"),
+                "cannot find option to add article to reading list",
+                5);
+
+
+        waitForElementAndClick(
+                By.id("org.wikipedia:id/onboarding_button"),
+                //By.xpath("//*[@text = 'GOT IT']"),
+                "cannot find 'GOT IT' button",
+                15);
+
+        waitForElementAndClear(
+                By.id("org.wikipedia:id/text_input"),
+                "cannot find input to set name of article folder",
+                15);
+
+        waitForElementAndSendKeys(
+                By.id("org.wikipedia:id/text_input"),
+                name_of_folder,
+                "cannot put text into article folder input",
+                5);
+
+        waitForElementAndClick(
+                By.xpath("//*[@text = 'OK']"),
+                "cannot find OK option ",
+                5);
+    }
+
+    private void addingArticleToExistentFolder(String name_of_folder)
+    {
+        waitForElementAndClick(
+                By.xpath("//android.widget.ImageView[@content-desc = 'More options']"),
+                "cannot find button to open article options",
+                5);
+
+        waitForElementAndClick(
+                By.xpath("//*[@text = 'Add to reading list']"),
+                "cannot find option to add article to reading list",
+                5);
+
+        waitForElementAndClick(
+                By.xpath("//*[@text = '" + name_of_folder + "']"),
+                "cannot find the existent folder with name " + name_of_folder,
+                15);
+
+    }
+
 
     protected void swipeUp(int timeOfSwipe){
         TouchAction action = new TouchAction(driver);
@@ -483,18 +635,18 @@ public class FirstTest {
         WebElement element = waitForElementPresent(
                 by,
                 error_message,
-                10);
+                20);
         int left_x = element.getLocation().getX();
         int right_x = left_x + element.getSize().getWidth();
         int upper_y = element.getLocation().getY();
         int lower_y = upper_y + element.getSize().getHeight();
         int middle_y = (upper_y + lower_y)/2;
 
-        System.out.println("left_x: " + left_x);
-        System.out.println("right_x: " + right_x);
-        System.out.println("upper_y: " + upper_y);
-        System.out.println("lower_y: " + lower_y);
-        System.out.println("middle_y: " + middle_y);
+       // System.out.println("left_x: " + left_x);
+       // System.out.println("right_x: " + right_x);
+       // System.out.println("upper_y: " + upper_y);
+       // System.out.println("lower_y: " + lower_y);
+       // System.out.println("middle_y: " + middle_y);
 
         TouchAction action = new TouchAction(driver);
         action
