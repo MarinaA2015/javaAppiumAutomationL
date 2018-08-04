@@ -457,6 +457,40 @@ public class FirstTest {
        Assert.assertTrue(element.getText().equals(article2_name));
 
     }
+    @Test
+    public void Ex6_AssertTitle()
+    {
+        String search_by_text = "Java";
+        String article_name = "JavaScript";
+        String header_pencil_id = "org.wikipedia:id/view_page_header_edit_pencil";
+        String article_title_id = "org.wikipedia:id/view_page_title_text";
+
+        // Searching of the article by text "Java"
+
+        waitForElementAndClick(By.id("org.wikipedia:id/search_container"),
+                "Cannot find Search Wikipedia input",
+                5);
+
+        waitForElementAndSendKeys(By.id("org.wikipedia:id/search_src_text"),
+                search_by_text,
+                "Cannot find Search.. input",
+                5);
+
+        waitForElementAndClick(By.xpath("//*[@resource-id = 'org.wikipedia:id/page_list_item_container']//*[@text = '" + article_name +"']"),
+                "Cannot find " + article_name + " topic searching by" +  search_by_text,
+                15);
+
+        waitForElementPresent(
+                By.id("org.wikipedia:id/view_page_header_edit_pencil"),
+                "cannot find pencil element which has to be displayed for the article by id " + header_pencil_id,
+                15);
+
+        assertElementPresent(
+                By.id(article_title_id),
+                "title of the article " + article_name + " was not found");
+
+    }
+
 
 
 
@@ -521,6 +555,15 @@ public class FirstTest {
         if (amounts_of_elements > 0){
             String default_message =  "An element '" + by.toString() + "' supposed to be not present";
             throw  new AssertionError(default_message + " " + error_mesage);
+        }
+
+    }
+
+    private void assertElementPresent(By by, String error_message)
+    {
+        if(getAmountOfElements(by) == 0){
+            String default_message = "An element '" + by.toString() + "' supposed to be not present,";
+            throw  new AssertionError(default_message + " " +error_message);
         }
 
     }
