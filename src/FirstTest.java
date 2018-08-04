@@ -13,6 +13,7 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import javax.print.attribute.standard.OrientationRequested;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -45,6 +46,7 @@ public class FirstTest {
     }
     @After
     public  void tearDown(){
+        driver.rotate(ScreenOrientation.PORTRAIT);
         driver.quit();
     }
 
@@ -418,7 +420,7 @@ public class FirstTest {
                 title_after_rotation);
 
         driver.rotate(ScreenOrientation.PORTRAIT);
-
+        
         String title_after_second_rotation = waitForElementAndGetAttribute(
                 By.id("org.wikipedia:id/view_page_title_text"),
                 "text",
@@ -429,6 +431,7 @@ public class FirstTest {
                 "Article name have been changed after screen rotation",
                 title_after_rotation,
                 title_after_second_rotation);
+
     }
 
     @Test
@@ -455,6 +458,7 @@ public class FirstTest {
         waitForElementPresent(By.xpath("//*[@resource-id = 'org.wikipedia:id/page_list_item_container']//*[@text = '" + article_name +"']"),
                 "Cannot find " + article_name + " after returning from background",
                 15);
+
     }
 
     @Test
