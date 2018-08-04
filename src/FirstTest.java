@@ -7,6 +7,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
+import org.openqa.selenium.ScreenOrientation;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -329,8 +330,6 @@ public class FirstTest {
                 By.xpath("//*[@text = 'object-oriented programming language']"),
                 "the saved article wasn't deleted from the list",
                 15);
-
-
     }
 
     @Test
@@ -383,7 +382,79 @@ public class FirstTest {
                 By.xpath(search_result_locator),
                 "we found some elements by request by " + search_line);
 
+    }
 
+    @Test
+    public void testScreenOrientationOnSearchResult()
+    {
+        String search_by_text = "Java";
+        String article_name = "JavaScript";
+
+        waitForElementAndClick(By.id("org.wikipedia:id/search_container"),
+                "Cannot find Search Wikipedia input",
+                5);
+        // Searching of the article by text "Java"
+        searchArticleAndOpenIt(search_by_text, article_name);
+
+        String article_title_id = "org.wikipedia:id/view_page_title_text";
+
+        String title_before_rotation = waitForElementAndGetAttribute(
+                By.id("org.wikipedia:id/view_page_title_text"),
+                "text",
+                "cannot find title of article by id " + article_title_id,
+                15);
+
+        driver.rotate(ScreenOrientation.LANDSCAPE);
+
+        String title_after_rotation = waitForElementAndGetAttribute(
+                By.id("org.wikipedia:id/view_page_title_text"),
+                "text",
+                "cannot find title of article after rtation by id " + article_title_id,
+                15);
+
+        Assert.assertEquals(
+                "Article name have been changed after screen rotation",
+                title_before_rotation,
+                title_after_rotation);
+
+        driver.rotate(ScreenOrientation.PORTRAIT);
+
+        String title_after_second_rotation = waitForElementAndGetAttribute(
+                By.id("org.wikipedia:id/view_page_title_text"),
+                "text",
+                "cannot find title of article after rtation by id " + article_title_id,
+                15);
+
+        Assert.assertEquals(
+                "Article name have been changed after screen rotation",
+                title_after_rotation,
+                title_after_second_rotation);
+    }
+
+    @Test
+    public void testSearchArticleInBackground()
+    {
+        String search_by_text = "Java";
+        String article_name = "JavaScript";
+
+        waitForElementAndClick(By.id("org.wikipedia:id/search_container"),
+                "Cannot find Search Wikipedia input",
+                5);
+
+        waitForElementAndSendKeys(By.id("org.wikipedia:id/search_src_text"),
+                search_by_text,
+                "Cannot find Search.. input",
+                5);
+
+        waitForElementPresent(By.xpath("//*[@resource-id = 'org.wikipedia:id/page_list_item_container']//*[@text = '" + article_name +"']"),
+                "Cannot find " + article_name + " topic searching by" +  search_by_text,
+                15);
+
+        driver.runAppInBackground(2);
+
+        waitForElementPresent(By.xpath("//*[@resource-id = 'org.wikipedia:id/page_list_item_container']//*[@text = '" + article_name +"']"),
+                "Cannot find " + article_name + " after returning from background",
+                15);
     }
 
     @Test
@@ -698,6 +769,13 @@ public class FirstTest {
                 .moveTo(left_x,middle_y)
                 .release()
                 .perform();
+
+    }
+
+    private String waitForElementAndGetAttribute(By by, String attribute, String error_message, long timeoutInSeconds )
+    {
+        WebElement element = waitForElementPresent(by, error_message, timeoutInSeconds);
+        return element.getAttribute(attribute);
 
     }
 }
