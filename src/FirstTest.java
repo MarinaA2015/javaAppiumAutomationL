@@ -3,6 +3,7 @@ import io.appium.java_client.TouchAction;
 import io.appium.java_client.android.AndroidDriver;
 import lib.CoreTestCase;
 import lib.ui.MainPageObject;
+import lib.ui.SearchPageObject;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -40,50 +41,24 @@ public class FirstTest extends CoreTestCase{
     @Test
     public void testSearch()
     {
-
-        mainPageObject.waitForElementAndClick(By.xpath("//*[contains(@text,'Search Wikipedia')]"),
-                                "Cannot find Search Wikipedia input",
-                                5);
-
-        mainPageObject.waitForElementAndSendKeys(By.xpath("//*[contains(@text,'Search…')]"),
-                                 "Java",
-                                 "Cannot find object-oriented programming language topic searching by Java",
-                                15);
-
-
-        mainPageObject.waitForElementPresent(By.xpath("//*[@resource-id = 'org.wikipedia:id/page_list_item_container']//*[@text = 'Object-oriented programming language']"),
-                                    "Cannot find object-oriented programming language topic searching by Java",
-                                        15);
+        SearchPageObject searchPageObject = new SearchPageObject(driver);
+        searchPageObject.initSearchInput();
+        searchPageObject.typeSearchLine("Java");
+        searchPageObject.waitForSearchResult("Object-oriented programming language");
 
     }
 
     @Test
     public void testCancelSearch()
     {
-        mainPageObject.waitForElementAndClick(By.id("org.wikipedia:id/search_container"),
-                                "Cannot find Search Wikipedia input",
-                                5);
-
-        mainPageObject.waitForElementAndSendKeys(By.id("org.wikipedia:id/search_src_text"),
-                                  "Java",
-                                    "Cannot find Search.. input",
-                                    5);
-
-        mainPageObject.waitForElementPresent(By.xpath("//*[@resource-id = 'org.wikipedia:id/page_list_item_container']//*[@text = 'Object-oriented programming language']"),
-                             "Cannot find object-oriented programming language topic searching by Java",
-                                15);
-
-        mainPageObject.waitForElementAndClear(By.id("org.wikipedia:id/search_src_text"),
-                                "Cannot find Search.. input",
-                                 15);
-
-        mainPageObject.waitForElementAndClick(By.id("org.wikipedia:id/search_close_btn"),
-                                "Cannot find X - button",
-                                5);
-
-        mainPageObject.waitForElementNotPresent(By.id("org.wikipedia:id/search_close_btn"),
-                                      "X - button is still on the page",
-                                        15);
+        SearchPageObject searchPageObject = new SearchPageObject(driver);
+        searchPageObject.initSearchInput();
+        searchPageObject.typeSearchLine("Java");
+        searchPageObject.waitForSearchResult("Object-oriented programming language");
+        searchPageObject.waitForCancelButtonToAppear();
+        searchPageObject.clickCancelSearch();
+        searchPageObject.clickCancelSearch();
+        searchPageObject.waitForCancelButtonToDisappear();
     }
 
     @Test
