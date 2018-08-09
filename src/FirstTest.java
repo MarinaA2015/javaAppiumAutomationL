@@ -2,6 +2,7 @@ import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.TouchAction;
 import io.appium.java_client.android.AndroidDriver;
 import lib.CoreTestCase;
+import lib.ui.ArticlePageObject;
 import lib.ui.MainPageObject;
 import lib.ui.SearchPageObject;
 import org.junit.After;
@@ -64,23 +65,17 @@ public class FirstTest extends CoreTestCase{
     @Test
     public void testCompareArticleTitle()
     {
-        mainPageObject.waitForElementAndClick(By.id("org.wikipedia:id/search_container"),
-                "Cannot find Search Wikipedia input",
-                5);
+        SearchPageObject searchPageObject = new SearchPageObject(driver);
+        searchPageObject.initSearchInput();
+        searchPageObject.typeSearchLine("Java");
+        searchPageObject.waitForSearchResult("Object-oriented programming language");
+        searchPageObject.clickByArticleWithSubstring("Object-oriented programming language");
 
-        mainPageObject.waitForElementAndSendKeys(By.id("org.wikipedia:id/search_src_text"),
-                "Java",
-                "Cannot find Search.. input",
-                5);
+        ArticlePageObject articlePageObject = new ArticlePageObject(driver);
 
-        mainPageObject.waitForElementAndClick(By.xpath("//*[@resource-id = 'org.wikipedia:id/page_list_item_container']//*[@text = 'Object-oriented programming language']"),
-                "Cannot find object-oriented programming language topic searching by Java",
-                15);
+        //articlePageObject.waitForTitleElement();
 
-        WebElement element = mainPageObject.waitForElementPresent(By.id("org.wikipedia:id/view_page_title_text"),
-            "Cannot find article title",
-            15);
-        String title = element.getAttribute("text");
+        String title = articlePageObject.getArticleTitle();
 
         Assert.assertEquals("We see unexpected title",
                         "Java (programming language)",
@@ -90,29 +85,15 @@ public class FirstTest extends CoreTestCase{
     @Test
     public void testSwipeArticle()
     {
-        mainPageObject.waitForElementAndClick(By.id("org.wikipedia:id/search_container"),
-                "Cannot find Search Wikipedia input",
-                5);
+        SearchPageObject searchPageObject = new SearchPageObject(driver);
+        searchPageObject.initSearchInput();
+        searchPageObject.typeSearchLine("Appium");
+        searchPageObject.waitForSearchResult("Appium");
+        searchPageObject.clickByArticleWithSubstring("Appium");
 
-        mainPageObject.waitForElementAndSendKeys(By.id("org.wikipedia:id/search_src_text"),
-                "Appium",
-                "Cannot find Search.. input",
-                5);
-
-        mainPageObject.waitForElementAndClick(By.xpath("//*[@resource-id = 'org.wikipedia:id/page_list_item_title'][@text = 'Appium']"),
-                "Cannot find article Appium in Search",
-                15);
-
-        mainPageObject.waitForElementPresent(By.id("org.wikipedia:id/view_page_title_text"),
-                "Cannot find article title",
-                15);
-
-        mainPageObject.swipeUpTllFindElements(
-                By.xpath("//*[@text = 'View page in browser']"),
-                "Cannot find the end of the article",
-                20);
-
-
+        ArticlePageObject articlePageObject = new ArticlePageObject(driver);
+        articlePageObject.waitForTitleElement();
+        articlePageObject.swipeToFooter();
 
     }
 
