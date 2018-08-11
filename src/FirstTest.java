@@ -2,9 +2,7 @@ import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.TouchAction;
 import io.appium.java_client.android.AndroidDriver;
 import lib.CoreTestCase;
-import lib.ui.ArticlePageObject;
-import lib.ui.MainPageObject;
-import lib.ui.SearchPageObject;
+import lib.ui.*;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -178,104 +176,32 @@ public class FirstTest extends CoreTestCase{
     @Test
     public void testSaveNewArticleToMyList()
     {
-        mainPageObject.waitForElementAndClick(By.id("org.wikipedia:id/search_container"),
-                "Cannot find Search Wikipedia input",
-                15);
-
-        mainPageObject.waitForElementAndSendKeys(By.id("org.wikipedia:id/search_src_text"),
-                "Java",
-                "Cannot find Search.. input",
-                5);
-
-        mainPageObject.waitForElementAndClick(By.xpath("//*[@resource-id = 'org.wikipedia:id/page_list_item_container']//*[@text = 'Object-oriented programming language']"),
-                "Cannot find object-oriented programming language topic searching by Java",
-                15);
-
-        mainPageObject.waitForElementPresent(By.id("org.wikipedia:id/view_page_title_text"),
-                "Cannot find article title",
-                25);
-
-        mainPageObject.waitForElementAndClick(
-                By.xpath("//android.widget.ImageView[@content-desc = 'More options']"),
-                "cannot find button to open article options",
-                5);
-
-        mainPageObject.waitForElementAndClick(
-                By.xpath("//*[@text = 'Add to reading list']"),
-                "cannot find option to add article to reading list",
-                5);
-        System.out.println("before clicking by 'GOT IT'");
-
-        mainPageObject.waitForElementAndClick(
-                By.id("org.wikipedia:id/onboarding_button"),
-                //By.xpath("//*[@text = 'GOT IT']"),
-                "cannot find 'GOT IT' button",
-                15);
-
-        System.out.println("after clicking by 'GOT IT'");
-
-      /* waitForElementAndClick(
-               By.id("org.wikipedia:id/create_button"),
-               "Cannot find button to create a list",
-               15);*/
-
-        mainPageObject.waitForElementAndClear(
-                By.id("org.wikipedia:id/text_input"),
-                "cannot find input to set name of article folder",
-                15);
-
+        String search_line = "Java";
+        String subtitle = "Object-oriented programming language";
         String name_of_folder = "Learning Programming";
 
-        mainPageObject.waitForElementAndSendKeys(
-                By.id("org.wikipedia:id/text_input"),
-                name_of_folder,
-                "cannot put text into article folder input",
-                5);
+        SearchPageObject searchPageObject = new SearchPageObject(driver);
+        searchPageObject.initSearchInput();
+        searchPageObject.typeSearchLine(search_line);
+        searchPageObject.waitForSearchResult(subtitle);
+        searchPageObject.clickByArticleWithSubstring(subtitle);
 
-        mainPageObject.waitForElementAndClick(
-                By.xpath("//*[@text = 'OK']"),
-                "cannot find OK option ",
-                5);
-
-       // driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-
-        mainPageObject.waitForElementAndClick(
-                By.xpath("//android.widget.ImageButton[@content-desc = 'Navigate up']"),
-                "Cannot close article, cannot find X",
-                5);
-
-        mainPageObject.waitForElementAndClick(
-                By.xpath("//android.widget.FrameLayout[@content-desc = 'My lists']"),
-                "Cannot find navigation button to My List",
-                15);
-
-        mainPageObject.waitForElementAndClick(
-                By.xpath("//*[@text = 'Learning Programming']"),
-                "cannot find '" + name_of_folder + "' folder",
-                15);
-       /* waitForElementPresent(
-                By.xpath("//*[@text = 'object-oriented programming language']"),
-                "cannot find object-oriented programming language topic in my folder",
-                35);
-
-       waitForElementAndClick(
-                By.id("org.wikipedia:id/page_list_item_action_primary"),
-                "cannot find button to open article options",
-                5);
-
-        waitForElementAndClick(
-                By.xpath("//*[@text = 'Remove from Learning Programming']"),
-                "cannot find option to remove the article from the list",
-                15);*/
-        mainPageObject.swipeElementToLeft(
-               By.xpath("//*[@text = 'object-oriented programming language']"),
-               "cannot find saved article");
+        ArticlePageObject articlePageObject = new ArticlePageObject(driver);
+        String article_title = articlePageObject.getArticleTitle();
 
 
-        mainPageObject.waitForElementNotPresent(
-                By.xpath("//*[@text = 'object-oriented programming language']"),
-                "the saved article wasn't deleted from the list",
-                15);
+
+        articlePageObject.addArticleToMyList(name_of_folder);
+        articlePageObject.closeArticle();
+
+
+        NavigationUI navigationUI = new NavigationUI(driver);
+        navigationUI.clickToMyList();
+
+        MyListsPageObject myListsPageObject = new MyListsPageObject(driver);
+        myListsPageObject.openFolderByName(name_of_folder);
+        myListsPageObject.swipeArticleToDelete(article_title);
+
     }
 
     @Test
