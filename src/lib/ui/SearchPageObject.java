@@ -11,7 +11,9 @@ public class SearchPageObject extends MainPageObject {
     private static final String SEARCH_INIT_ELEMENT = "//*[contains(@text,'Search Wikipedia')]",
                                 SEARCH_INIT = "//*[contains(@text,'Search…')]",
                                 SEARCH_CANCEL_BUTTON = "org.wikipedia:id/search_close_btn",
-                                SEARCH_RESULT_BY_SUBSTRING_TPL = "//*[@resource-id = 'org.wikipedia:id/page_list_item_container']//*[@text = '{SUBSTRING}']";
+                                SEARCH_RESULT_BY_SUBSTRING_TPL = "//*[@resource-id = 'org.wikipedia:id/page_list_item_container']//*[@text = '{SUBSTRING}']",
+                                SEARCH_RESULT_ELEMENT = "//*[@resource-id = 'org.wikipedia:id/search_results_list']/*[@resource-id = 'org.wikipedia:id/page_list_item_container']",
+                                SEARCH_EMPTY_RESULT_LABEL = "//*[@text = 'No results found']";
 
 
     public SearchPageObject(AppiumDriver driver) {
@@ -59,5 +61,30 @@ public class SearchPageObject extends MainPageObject {
     {
         String search_result_substring = getResultSearchElement(substring);
         this.waitForElementAndClick(By.xpath(search_result_substring), "Cannot find and click search result with substring " + substring,15);
+    }
+    public int getAmountOfFoundArticles()
+    {
+        this.waitForElementPresent(
+                By.xpath(SEARCH_RESULT_ELEMENT),
+                "cannot find anything by request ",
+                25);
+
+        return this.getAmountOfElements(By.xpath(SEARCH_RESULT_ELEMENT));
+    }
+
+    public void waitForEmptyResultLabel()
+    {
+       // String search_result_locator = "//*[@resource-id = 'org.wikipedia:id/search_results_list']/*[@resource-id = 'org.wikipedia:id/page_list_item_container']";
+
+        this.waitForElementPresent(
+                By.xpath(SEARCH_EMPTY_RESULT_LABEL),
+                "cannot find empty result label by result request " ,
+                15);
+
+    }
+
+    public void assertThereIsNoResultOfSearch()
+    {
+        this.assertElementNotPresent(By.xpath(SEARCH_RESULT_ELEMENT), "We supposed not t find any results");
     }
 }
