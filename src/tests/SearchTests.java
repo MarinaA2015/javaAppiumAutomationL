@@ -56,18 +56,20 @@ public class SearchTests extends CoreTestCase
         SearchPageObject searchPageObject = new SearchPageObject(driver);
         searchPageObject.initSearchInput();
         searchPageObject.typeSearchLine(search_line);
-
-        /*mainPageObject.waitForElementAndClick(By.id("org.wikipedia:id/search_container"),
-                "Cannot find Search Wikipedia input",
-                5);*/
         searchPageObject.waitForEmptyResultLabel();
         searchPageObject.assertThereIsNoResultOfSearch();
 
+    }
 
-
-        //String search_result_locator = "//*[@resource-id = 'org.wikipedia:id/search_results_list']/*[@resource-id = 'org.wikipedia:id/page_list_item_container']";
-
-
+    @Test
+    public void testEx3_ReceiveAnySearchResultAndCancel() {
+        SearchPageObject searchPageObject = new SearchPageObject(driver);
+        searchPageObject.initSearchInput();
+        searchPageObject.typeSearchLine("Java");
+        searchPageObject.waitForCancelButtonToAppear();
+        searchPageObject.assertExistsResultOfSearch();
+        searchPageObject.clickCancelSearch();
+        searchPageObject.assertThereIsNoResultOfSearch();
     }
 
 

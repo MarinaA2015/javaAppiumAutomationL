@@ -40,4 +40,37 @@ public class MyListsTests extends CoreTestCase
 
     }
 
+    @Test
+    public void testEx5_SaveTwoArticlesToMyList()
+    {
+        String search_by_text1 = "Java";
+        String search_by_text2 = "Oracle";
+        String article_title1 = "JavaScript";
+        String article_title2 = "Oracle Database";
+        String name_of_folder = "Learning Programming";
+
+        MyListsPageObject myListsPageObject = new MyListsPageObject(driver);
+        myListsPageObject
+                .searchArticleByTextAndPutToMyList(search_by_text1, article_title1, name_of_folder);
+        myListsPageObject
+                .searchArticleByTextAndPutToExistentFolderInMyList(search_by_text2, article_title2, name_of_folder);
+
+        // open name_of_folder in My List
+        NavigationUI navigationUI = new NavigationUI(driver);
+        navigationUI.clickToMyList();
+        myListsPageObject.openFolderByName(name_of_folder);
+
+        // delete the first article using swipe
+        myListsPageObject.swipeArticleToDelete(article_title1);
+        myListsPageObject.openArticleByTitle(article_title2);
+
+        ArticlePageObject articlePageObject = new ArticlePageObject(driver);
+        articlePageObject.waitForTitleElement();
+        assertEquals("Article title is not the '" + article_title2 + "'",
+                         articlePageObject.getArticleTitle(),
+                         article_title2);
+
+    }
+
+
 }

@@ -2,6 +2,7 @@ package lib.ui;
 
 import io.appium.java_client.AppiumDriver;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 
 /**
  * Created by Inka on 11-Aug-18.
@@ -62,4 +63,45 @@ public class MyListsPageObject extends MainPageObject {
                 "Cannot find the article by title " + article_title,
                 15);
     }
+    public void openArticleByTitle(String article_title) {
+        this.waitForArticleToAppearByTitle(article_title);
+        this.waitForElementAndClick(
+                By.xpath(getArticleTitle(article_title)),
+                "cannot find the article with name '" + article_title + "'",
+                15);
+    }
+
+    public String searchArticleByTextAndPutToMyList(String text, String subtitle, String name_of_folder)
+    {
+        SearchPageObject searchPageObject = new SearchPageObject(driver);
+        // find and add one article to my folder
+        searchPageObject.initSearchInput();
+        searchPageObject.typeSearchLine(text);
+        searchPageObject.waitForSearchResult(subtitle);
+        searchPageObject.clickByArticleWithSubstring(subtitle);
+
+        ArticlePageObject articlePageObject = new ArticlePageObject(driver);
+        String article_title = articlePageObject.getArticleTitle();
+
+        articlePageObject.addArticleToMyList(name_of_folder);
+        articlePageObject.closeArticle();
+        return article_title;
+    }
+    public String searchArticleByTextAndPutToExistentFolderInMyList(String text, String subtitle, String name_of_folder)
+    {
+        SearchPageObject searchPageObject = new SearchPageObject(driver);
+        // find and add one article to my folder
+        searchPageObject.initSearchInput();
+        searchPageObject.typeSearchLine(text);
+        searchPageObject.waitForSearchResult(subtitle);
+        searchPageObject.clickByArticleWithSubstring(subtitle);
+
+        ArticlePageObject articlePageObject = new ArticlePageObject(driver);
+        String article_title = articlePageObject.getArticleTitle();
+
+        articlePageObject.addArticleToExistentFolderInMyList(name_of_folder);
+        articlePageObject.closeArticle();
+        return article_title;
+    }
+
 }

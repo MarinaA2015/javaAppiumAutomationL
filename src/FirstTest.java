@@ -38,10 +38,6 @@ public class FirstTest extends CoreTestCase{
     }
 
 
-
-
-
-
     @Test
     public void testEx2_TextSearchPresentInSearchField(){
         mainPageObject.waitForElementAndClick(By.id("org.wikipedia:id/search_container"),
@@ -59,9 +55,10 @@ public class FirstTest extends CoreTestCase{
                 textInSearchField);
     }
 
-    @Test
+   /* @Test
     public void testEx3_ReceiveAnySearchResultAndCancel()
     {
+
         mainPageObject.waitForElementAndClick(
                 //By.id("org.wikipedia:id/page_list_item_title"),
                 By.id("org.wikipedia:id/search_container"),
@@ -88,7 +85,7 @@ public class FirstTest extends CoreTestCase{
                                                 15);
         //Assert.assertTrue("Search result is not empty",bool);
 
-    }
+    }*/
 
     @Test
     public void testEx4_ReceiveAllSearchResultAndVerifyThem()
@@ -122,7 +119,7 @@ public class FirstTest extends CoreTestCase{
 
 
 
-    @Test
+  /*  @Test
     public void testEx5_SaveTwoArticlesToMyList()
     {
         String search_by_text1 = "Java";
@@ -192,8 +189,10 @@ public class FirstTest extends CoreTestCase{
 
        assertTrue(element.getText().equals(article2_name));
 
-    }
-    @Test
+    }*/
+
+
+    /*@Test
     public void testEx6_AssertTitle()
     {
         String search_by_text = "Java";
@@ -225,7 +224,7 @@ public class FirstTest extends CoreTestCase{
                 By.id(article_title_id),
                 "title of the article " + article_name + " was not found");
 
-    }
+    }*/
 
 
 

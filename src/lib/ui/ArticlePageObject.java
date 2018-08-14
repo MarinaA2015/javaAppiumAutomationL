@@ -17,15 +17,22 @@ public class ArticlePageObject extends MainPageObject{
                     ADD_TO_MY_LIST_OVERLAY = "org.wikipedia:id/onboarding_button",
                     MY_LIST_NAME_INPUT = "org.wikipedia:id/text_input",
                     MY_LIST_OK_BUTTON = "//*[@text = 'OK']",
-                    CLOSE_ARTICLE_BUTTON = "//android.widget.ImageButton[@content-desc = 'Navigate up']";
+                    CLOSE_ARTICLE_BUTTON = "//android.widget.ImageButton[@content-desc = 'Navigate up']",
+                    EXISTENT_FOLDER_BY_NAME_TMPL = "//*[@text = '{FOLDER_NAME}']",
+                    HEADER_PENCIL_ID = "org.wikipedia:id/view_page_header_edit_pencil",
+                    ARTICLE_TITE_ID = "org.wikipedia:id/view_page_title_text";
 
     public ArticlePageObject(AppiumDriver driver) {
         super(driver);
     }
 
+    private static String getXPathFolderByName(String name_of_folder)
+    {
+        return EXISTENT_FOLDER_BY_NAME_TMPL.replace("{FOLDER_NAME}",name_of_folder);
+    }
     public WebElement waitForTitleElement()
     {
-        return this.waitForElementPresent(By.id(TITLE), "Cannot find element by title", 15);
+        return this.waitForElementPresent(By.id(TITLE), "Cannot find element by title", 25);
     }
 
     public String  getArticleTitle()
@@ -41,7 +48,6 @@ public class ArticlePageObject extends MainPageObject{
 
     public void addArticleToMyList(String name_of_folder)
     {
-
 
         this.waitForElementAndClick(
                 By.xpath(OPTIONS_BUTTON),
@@ -84,5 +90,39 @@ public class ArticlePageObject extends MainPageObject{
                 15);
 
     }
+    public void addArticleToExistentFolderInMyList(String name_of_folder)
+    {
+        this.waitForElementAndClick(
+                By.xpath(OPTIONS_BUTTON),
+                "cannot find button to open article options",
+                25);
+
+        this.waitForElementAndClick(
+                By.xpath(OPTION_ADD_TO_MY_READING_LIST_BUTTON),
+                "cannot find option to add article to reading list",
+                25);
+
+
+        this.waitForElementAndClick(
+                By.xpath(getXPathFolderByName(name_of_folder)),
+                "cannot find the existent folder with name " + name_of_folder,
+                15);
+
+    }
+    public void waitForPencilElementToEditHeader()
+    {
+        this.waitForElementPresent(
+                By.id(HEADER_PENCIL_ID),
+                "cannot find pencil element which has to be displayed for the article by id " + HEADER_PENCIL_ID,
+                15);
+    }
+
+    public void assertExistsArticleTitle()
+    {
+        this.assertElementPresent(
+                By.id(ARTICLE_TITE_ID),
+                "title of the article was not found");
+    }
+
 
 }
