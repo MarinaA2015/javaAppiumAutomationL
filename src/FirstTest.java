@@ -250,40 +250,28 @@ public class FirstTest extends CoreTestCase{
         String search_by_text = "Java";
         String article_name = "JavaScript";
 
-        mainPageObject.waitForElementAndClick(By.id("org.wikipedia:id/search_container"),
-                "Cannot find Search Wikipedia input",
-                5);
-        // Searching of the article by text "Java"
-        mainPageObject.searchArticleAndOpenIt(search_by_text, article_name);
+        SearchPageObject searchPageObject = new SearchPageObject(driver);
+        searchPageObject.initSearchInput();
+        searchPageObject.typeSearchLine(search_by_text);
+        searchPageObject.waitForSearchResult(article_name);
+        searchPageObject.clickByArticleWithSubstring(article_name);
 
-        String article_title_id = "org.wikipedia:id/view_page_title_text";
+        ArticlePageObject articlePageObject = new ArticlePageObject(driver);
 
-        String title_before_rotation = mainPageObject.waitForElementAndGetAttribute(
-                By.id("org.wikipedia:id/view_page_title_text"),
-                "text",
-                "cannot find title of article by id " + article_title_id,
-                15);
+        String title_before_rotation =articlePageObject.getArticleTitle();
 
-        driver.rotate(ScreenOrientation.LANDSCAPE);
+        this.rotateScreenLandscape();
 
-        String title_after_rotation = mainPageObject.waitForElementAndGetAttribute(
-                By.id("org.wikipedia:id/view_page_title_text"),
-                "text",
-                "cannot find title of article after rtation by id " + article_title_id,
-                15);
+        String title_after_rotation = articlePageObject.getArticleTitle();
 
         Assert.assertEquals(
                 "Article name have been changed after screen rotation",
                 title_before_rotation,
                 title_after_rotation);
 
-        driver.rotate(ScreenOrientation.PORTRAIT);
+        this.rotateScreenPortraite();
 
-        String title_after_second_rotation = mainPageObject.waitForElementAndGetAttribute(
-                By.id("org.wikipedia:id/view_page_title_text"),
-                "text",
-                "cannot find title of article after rtation by id " + article_title_id,
-                15);
+        String title_after_second_rotation = articlePageObject.getArticleTitle();
 
         Assert.assertEquals(
                 "Article name have been changed after screen rotation",
@@ -298,24 +286,14 @@ public class FirstTest extends CoreTestCase{
         String search_by_text = "Java";
         String article_name = "JavaScript";
 
-        mainPageObject.waitForElementAndClick(By.id("org.wikipedia:id/search_container"),
-                "Cannot find Search Wikipedia input",
-                5);
+        SearchPageObject searchPageObject = new SearchPageObject(driver);
+        searchPageObject.initSearchInput();
+        searchPageObject.typeSearchLine(search_by_text);
+        searchPageObject.waitForSearchResult(article_name);
 
-        mainPageObject.waitForElementAndSendKeys(By.id("org.wikipedia:id/search_src_text"),
-                search_by_text,
-                "Cannot find Search.. input",
-                5);
+        this.backgroundApp(2);
 
-        mainPageObject.waitForElementPresent(By.xpath("//*[@resource-id = 'org.wikipedia:id/page_list_item_container']//*[@text = '" + article_name +"']"),
-                "Cannot find " + article_name + " topic searching by" +  search_by_text,
-                15);
-
-        driver.runAppInBackground(2);
-
-        mainPageObject.waitForElementPresent(By.xpath("//*[@resource-id = 'org.wikipedia:id/page_list_item_container']//*[@text = '" + article_name +"']"),
-                "Cannot find " + article_name + " after returning from background",
-                15);
+        searchPageObject.waitForSearchResult(article_name);
 
     }
 

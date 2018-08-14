@@ -33,6 +33,7 @@ public class CoreTestCase extends TestCase {
         capabilities.setCapability("app","E:/Marina/Tel Ran/QA/JavaSeleniumLocal/javaAppAutomation/apks/org.wikipedia.apk");
 
         driver = new AndroidDriver(new URL(AppiumURL), capabilities);
+        this.rotateScreenPortraite();
     }
 
     @Override
@@ -41,6 +42,21 @@ public class CoreTestCase extends TestCase {
         driver.rotate(ScreenOrientation.PORTRAIT);
         driver.quit();
         super.tearDown();
+    }
+
+    protected void rotateScreenPortraite()
+    {
+        driver.rotate(ScreenOrientation.PORTRAIT);
+    }
+
+    protected void rotateScreenLandscape()
+    {
+        driver.rotate(ScreenOrientation.LANDSCAPE);
+    }
+
+    protected void backgroundApp(int seconds)
+    {
+        driver.runAppInBackground(seconds);
     }
 
 
