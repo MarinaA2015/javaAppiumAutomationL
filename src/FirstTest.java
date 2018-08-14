@@ -33,67 +33,14 @@ public class FirstTest extends CoreTestCase{
     protected void setUp()throws Exception
     {
         super.setUp();
-        mainPageObject = new MainPageObject(driver);
+       mainPageObject = new MainPageObject(driver);
 
     }
 
-    @Test
-    public void testSearch()
-    {
-        SearchPageObject searchPageObject = new SearchPageObject(driver);
-        searchPageObject.initSearchInput();
-        searchPageObject.typeSearchLine("Java");
-        searchPageObject.waitForSearchResult("Object-oriented programming language");
 
-    }
 
-    @Test
-    public void testCancelSearch()
-    {
-        SearchPageObject searchPageObject = new SearchPageObject(driver);
-        searchPageObject.initSearchInput();
-        searchPageObject.typeSearchLine("Java");
-        searchPageObject.waitForSearchResult("Object-oriented programming language");
-        searchPageObject.waitForCancelButtonToAppear();
-        searchPageObject.clickCancelSearch();
-        searchPageObject.clickCancelSearch();
-        searchPageObject.waitForCancelButtonToDisappear();
-    }
 
-    @Test
-    public void testCompareArticleTitle()
-    {
-        SearchPageObject searchPageObject = new SearchPageObject(driver);
-        searchPageObject.initSearchInput();
-        searchPageObject.typeSearchLine("Java");
-        searchPageObject.waitForSearchResult("Object-oriented programming language");
-        searchPageObject.clickByArticleWithSubstring("Object-oriented programming language");
 
-        ArticlePageObject articlePageObject = new ArticlePageObject(driver);
-
-        //articlePageObject.waitForTitleElement();
-
-        String title = articlePageObject.getArticleTitle();
-
-        Assert.assertEquals("We see unexpected title",
-                        "Java (programming language)",
-                            title);
-    }
-
-    @Test
-    public void testSwipeArticle()
-    {
-        SearchPageObject searchPageObject = new SearchPageObject(driver);
-        searchPageObject.initSearchInput();
-        searchPageObject.typeSearchLine("Appium");
-        searchPageObject.waitForSearchResult("Appium");
-        searchPageObject.clickByArticleWithSubstring("Appium");
-
-        ArticlePageObject articlePageObject = new ArticlePageObject(driver);
-        articlePageObject.waitForTitleElement();
-        articlePageObject.swipeToFooter();
-
-    }
 
     @Test
     public void testEx2_TextSearchPresentInSearchField(){
@@ -107,7 +54,7 @@ public class FirstTest extends CoreTestCase{
 
         String textInSearchField = element.getAttribute("text");
 
-        Assert.assertEquals("We do not see 'Search..' text",
+        assertEquals("We do not see 'Search..' text",
                 "Search…",
                 textInSearchField);
     }
@@ -170,132 +117,10 @@ public class FirstTest extends CoreTestCase{
             //System.out.println(listElements.get(i).getAttribute("text").toLowerCase());
         }
 
-        Assert.assertEquals("Some search results are not contains the word: " + Arrays.toString(new List[]{listError}), counter,length);
+        assertEquals("Some search results are not contains the word: " + Arrays.toString(new List[]{listError}), counter,length);
     }
 
-    @Test
-    public void testSaveNewArticleToMyList()
-    {
-        String search_line = "Java";
-        String subtitle = "Object-oriented programming language";
-        String name_of_folder = "Learning Programming";
 
-        SearchPageObject searchPageObject = new SearchPageObject(driver);
-        searchPageObject.initSearchInput();
-        searchPageObject.typeSearchLine(search_line);
-        searchPageObject.waitForSearchResult(subtitle);
-        searchPageObject.clickByArticleWithSubstring(subtitle);
-
-        ArticlePageObject articlePageObject = new ArticlePageObject(driver);
-        String article_title = articlePageObject.getArticleTitle();
-
-
-
-        articlePageObject.addArticleToMyList(name_of_folder);
-        articlePageObject.closeArticle();
-
-
-        NavigationUI navigationUI = new NavigationUI(driver);
-        navigationUI.clickToMyList();
-
-        MyListsPageObject myListsPageObject = new MyListsPageObject(driver);
-        myListsPageObject.openFolderByName(name_of_folder);
-        myListsPageObject.swipeArticleToDelete(article_title);
-
-    }
-
-    @Test
-    public void testAmountOfNotEmptySearch()
-    {
-
-        String search_line = "Linkin park discography";
-        //String subtitle = "Object-oriented programming language";
-
-        SearchPageObject searchPageObject = new SearchPageObject(driver);
-        searchPageObject.initSearchInput();
-        searchPageObject.typeSearchLine(search_line);
-        int amount_of_search = searchPageObject.getAmountOfFoundArticles();
-        //searchPageObject.waitForSearchResult(subtitle);
-
-
-        Assert.assertTrue(
-                "we found too few results",
-                amount_of_search > 0);
-
-    }
-    @Test
-    public void testAmountOfEmptySearch(){
-
-        String search_line = "jkgvnvrkgktggnntf";
-        SearchPageObject searchPageObject = new SearchPageObject(driver);
-        searchPageObject.initSearchInput();
-        searchPageObject.typeSearchLine(search_line);
-
-        /*mainPageObject.waitForElementAndClick(By.id("org.wikipedia:id/search_container"),
-                "Cannot find Search Wikipedia input",
-                5);*/
-        searchPageObject.waitForEmptyResultLabel();
-        searchPageObject.assertThereIsNoResultOfSearch();
-
-
-
-        //String search_result_locator = "//*[@resource-id = 'org.wikipedia:id/search_results_list']/*[@resource-id = 'org.wikipedia:id/page_list_item_container']";
-
-
-    }
-
-    @Test
-    public void testScreenOrientationOnSearchResult()
-    {
-        String search_by_text = "Java";
-        String article_name = "JavaScript";
-
-        SearchPageObject searchPageObject = new SearchPageObject(driver);
-        searchPageObject.initSearchInput();
-        searchPageObject.typeSearchLine(search_by_text);
-        searchPageObject.waitForSearchResult(article_name);
-        searchPageObject.clickByArticleWithSubstring(article_name);
-
-        ArticlePageObject articlePageObject = new ArticlePageObject(driver);
-
-        String title_before_rotation =articlePageObject.getArticleTitle();
-
-        this.rotateScreenLandscape();
-
-        String title_after_rotation = articlePageObject.getArticleTitle();
-
-        Assert.assertEquals(
-                "Article name have been changed after screen rotation",
-                title_before_rotation,
-                title_after_rotation);
-
-        this.rotateScreenPortraite();
-
-        String title_after_second_rotation = articlePageObject.getArticleTitle();
-
-        Assert.assertEquals(
-                "Article name have been changed after screen rotation",
-                title_after_rotation,
-                title_after_second_rotation);
-
-    }
-
-    @Test
-    public void testSearchArticleInBackground()
-    {
-        String search_by_text = "Java";
-        String article_name = "JavaScript";
-
-        SearchPageObject searchPageObject = new SearchPageObject(driver);
-        searchPageObject.initSearchInput();
-        searchPageObject.typeSearchLine(search_by_text);
-        searchPageObject.waitForSearchResult(article_name);
-
-        this.backgroundApp(2);
-
-        searchPageObject.waitForSearchResult(article_name);
-
-    }
 
     @Test
     public void testEx5_SaveTwoArticlesToMyList()
@@ -365,7 +190,7 @@ public class FirstTest extends CoreTestCase{
 
 
 
-       Assert.assertTrue(element.getText().equals(article2_name));
+       assertTrue(element.getText().equals(article2_name));
 
     }
     @Test
