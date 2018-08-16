@@ -9,8 +9,8 @@ import org.openqa.selenium.WebElement;
  */
 public class MyListsPageObject extends MainPageObject {
     public static final String
-                        FOLDER_BY_NAME_TPL = "//*[@text = '{FOLDER_NAME}']",
-                        ARTICLE_BY_TITLE_TPL = "//*[@text = '{ARTICLE_TITLE}']";
+                        FOLDER_BY_NAME_TPL = "xpath://*[@text = '{FOLDER_NAME}']",
+                        ARTICLE_BY_TITLE_TPL = "xpath://*[@text = '{ARTICLE_TITLE}']";
 
     public MyListsPageObject(AppiumDriver driver) {
         super(driver);
@@ -30,7 +30,7 @@ public class MyListsPageObject extends MainPageObject {
     {
         String name_of_folder_xpath = getFolderByName(name_of_folder);
         this.waitForElementAndClick(
-                By.xpath(name_of_folder_xpath),
+                name_of_folder_xpath,
                 "cannot find '" + name_of_folder + "' folder",
                 15);
     }
@@ -41,7 +41,7 @@ public class MyListsPageObject extends MainPageObject {
 
         this.waitForArticleToAppearByTitle(article_title);
         this.swipeElementToLeft(
-                By.xpath(name_of_article_by_xpath),
+                name_of_article_by_xpath,
                 "cannot find saved article");
         this.waitForArticleToDisappearByTitle(article_title);
 
@@ -50,7 +50,7 @@ public class MyListsPageObject extends MainPageObject {
     {
         String name_of_article_xpath = getArticleTitle(article_title);
         this.waitForElementNotPresent(
-                By.xpath(name_of_article_xpath),
+                name_of_article_xpath,
                 "the saved article with the name " + article_title + " wasn't deleted from the list",
                 15);
     }
@@ -59,14 +59,14 @@ public class MyListsPageObject extends MainPageObject {
     {
         String name_of_article_xpath = getArticleTitle(article_title);
         this.waitForElementPresent(
-                By.xpath(name_of_article_xpath),
+                name_of_article_xpath,
                 "Cannot find the article by title " + article_title,
                 15);
     }
     public void openArticleByTitle(String article_title) {
         this.waitForArticleToAppearByTitle(article_title);
         this.waitForElementAndClick(
-                By.xpath(getArticleTitle(article_title)),
+                getArticleTitle(article_title),
                 "cannot find the article with name '" + article_title + "'",
                 15);
     }

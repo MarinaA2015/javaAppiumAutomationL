@@ -38,22 +38,7 @@ public class FirstTest extends CoreTestCase{
     }
 
 
-    @Test
-    public void testEx2_TextSearchPresentInSearchField(){
-        mainPageObject.waitForElementAndClick(By.id("org.wikipedia:id/search_container"),
-                "Cannot find Search Wikipedia input",
-                5);
 
-        WebElement element = mainPageObject.waitForElementPresent(By.id("org.wikipedia:id/search_src_text"),
-                "Cannot find Search.. input",
-                15);
-
-        String textInSearchField = element.getAttribute("text");
-
-        assertEquals("We do not see 'Search..' text",
-                "Search…",
-                textInSearchField);
-    }
 
    /* @Test
     public void testEx3_ReceiveAnySearchResultAndCancel()
@@ -86,7 +71,7 @@ public class FirstTest extends CoreTestCase{
         //Assert.assertTrue("Search result is not empty",bool);
 
     }*/
-
+/*
     @Test
     public void testEx4_ReceiveAllSearchResultAndVerifyThem()
     {
@@ -117,7 +102,7 @@ public class FirstTest extends CoreTestCase{
         assertEquals("Some search results are not contains the word: " + Arrays.toString(new List[]{listError}), counter,length);
     }
 
-
+*/
 
   /*  @Test
     public void testEx5_SaveTwoArticlesToMyList()

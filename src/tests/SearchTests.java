@@ -84,5 +84,16 @@ public class SearchTests extends CoreTestCase
         searchPageObject.assertThereIsNoResultOfSearch();
     }
 
+    @Test
+    public void testEx2_TextSearchPresentInSearchField(){
+
+        SearchPageObject searchPageObject = new SearchPageObject(driver);
+        searchPageObject.initSearchInput();
+        String textInSearchField = searchPageObject.receiveTextFromSearchInput();
+
+        assertEquals("We do not see 'Search..' text",
+                "Search…",
+                textInSearchField);
+    }
 
 }
