@@ -14,20 +14,16 @@ import java.net.URL;
  * Created by Inka on 05-Aug-18.
  */
 public class CoreTestCase extends TestCase {
-    private static final String PLATFORM_ANDROID = "android";
-    private static final String PLATFORM_IOS = "ios";
 
     protected AppiumDriver driver ;
-    private static  String AppiumURL = "http://127.0.0.1.:4723/wd/hub";
+    protected Platform Platform;
 
     @Override
     protected void setUp() throws Exception
     {
         super.setUp();
-
-        DesiredCapabilities capabilities = getCapabilitiesByPatformEnv();
-
-        driver = new AndroidDriver(new URL(AppiumURL), capabilities);
+        this.Platform = new Platform();
+        driver = this.Platform.getDriver();
         this.rotateScreenPortraite();
     }
 
@@ -53,31 +49,5 @@ public class CoreTestCase extends TestCase {
     {
         driver.runAppInBackground(seconds);
     }
-
-    private DesiredCapabilities getCapabilitiesByPatformEnv() throws Exception
-    {
-        String platform = System.getenv("PLATFORM");
-        DesiredCapabilities capabilities =new DesiredCapabilities();
-
-        if (platform.equals(PLATFORM_ANDROID)) {
-            capabilities.setCapability("platformName","Android");
-            capabilities.setCapability("deviceName","AndroidTestDvice");
-            capabilities.setCapability("platformVersion","6.0");
-            capabilities.setCapability("automationName","Appium");
-            capabilities.setCapability("appPackage","org.wikipedia");
-            capabilities.setCapability("appActivity","main.MainActivity");
-            capabilities.setCapability("app","E:/Marina/Tel Ran/QA/JavaSeleniumLocal/javaAppAutomation/apks/org.wikipedia.apk");
-
-        } else if (platform.equals(PLATFORM_IOS)){
-            capabilities.setCapability("platformName", "iOS");
-            capabilities.setCapability("deviceName", "iPhone SE");
-            capabilities.setCapability("platformVersion", "11.3");
-            capabilities.setCapability("app", "E:/Marina/Tel Ran/QA/JavaSeleniumLocal/javaAppAutomation/apks/Wikipedia.app");
-        }
-        else throw  new Exception("Cannot get run platfrom from env variable. Platform value " + platform);
-
-        return capabilities;
-    }
-
 
 }
