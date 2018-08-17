@@ -6,16 +6,16 @@ import org.openqa.selenium.By;
 /**
  * Created by Inka on 07-Aug-18.
  */
-public class SearchPageObject extends MainPageObject {
+abstract public class SearchPageObject extends MainPageObject {
 
-    private static final String SEARCH_INIT_ELEMENT = "xpath://*[contains(@text,'Search Wikipedia')]",
-                                SEARCH_INIT = "xpath://*[contains(@text,'Search…')]",
-                                SEARCH_INIT_BY_ID = "id:org.wikipedia:id/search_src_text",
-                                SEARCH_CANCEL_BUTTON = "id:org.wikipedia:id/search_close_btn",
-                                SEARCH_RESULT_BY_SUBSTRING_TPL = "xpath://*[@resource-id = 'org.wikipedia:id/page_list_item_container']//*[@text = '{SUBSTRING}']",
-                                SEARCH_RESULT_ELEMENT = "xpath://*[@resource-id = 'org.wikipedia:id/search_results_list']/*[@resource-id = 'org.wikipedia:id/page_list_item_container']",
-                                SEARCH_EMPTY_RESULT_LABEL = "xpath://*[@text = 'No results found']",
-                                SEARCH_RESULT_BY_TITLE_DESCR_TPL = "xpath://*[@resource-id = 'org.wikipedia:id/page_list_item_title'][@text = '{TITLE}']/..//*[@text = '{DESCRIPTION}']" ;
+    protected static String SEARCH_INIT_ELEMENT,
+                                SEARCH_INIT,
+                                SEARCH_INIT_BY_ID,
+                                SEARCH_CANCEL_BUTTON,
+                                SEARCH_RESULT_BY_SUBSTRING_TPL,
+                                SEARCH_RESULT_ELEMENT,
+                                SEARCH_EMPTY_RESULT_LABEL,
+                                SEARCH_RESULT_BY_TITLE_DESCR_TPL ;
 
 
     public SearchPageObject(AppiumDriver driver) {
