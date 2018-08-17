@@ -18,6 +18,6 @@ public class IOSSearchPageObject extends SearchPageObject {
         SEARCH_RESULT_BY_TITLE_DESCR_TPL = "xpath://*[@resource-id = 'org.wikipedia:id/page_list_item_title'][@text = '{TITLE}']/..//*[@text = '{DESCRIPTION}']";
     }
     public IOSSearchPageObject(AppiumDriver driver){
-        super(driver);
+        super(driver) ;
     }
 }
