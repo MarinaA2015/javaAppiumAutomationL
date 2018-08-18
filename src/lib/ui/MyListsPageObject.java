@@ -1,6 +1,7 @@
 package lib.ui;
 
 import io.appium.java_client.AppiumDriver;
+import lib.ui.factories.SearchPageObjectFactory;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
@@ -73,7 +74,7 @@ public class MyListsPageObject extends MainPageObject {
 
     public String searchArticleByTextAndPutToMyList(String text, String subtitle, String name_of_folder)
     {
-        SearchPageObject searchPageObject = new SearchPageObject(driver);
+        SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);
         // find and add one article to my folder
         searchPageObject.initSearchInput();
         searchPageObject.typeSearchLine(text);
@@ -89,7 +90,7 @@ public class MyListsPageObject extends MainPageObject {
     }
     public String searchArticleByTextAndPutToExistentFolderInMyList(String text, String subtitle, String name_of_folder)
     {
-        SearchPageObject searchPageObject = new SearchPageObject(driver);
+        SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);
         // find and add one article to my folder
         searchPageObject.initSearchInput();
         searchPageObject.typeSearchLine(text);

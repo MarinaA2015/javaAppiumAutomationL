@@ -3,6 +3,7 @@ package lib;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.android.AndroidDriver;
 import junit.framework.TestCase;
+import lib.ui.WelcomePageObject;
 import org.junit.After;
 import org.junit.Before;
 import org.openqa.selenium.ScreenOrientation;
@@ -16,15 +17,15 @@ import java.net.URL;
 public class CoreTestCase extends TestCase {
 
     protected AppiumDriver driver ;
-    protected Platform Platform;
+    //protected Platform Platform;
 
     @Override
     protected void setUp() throws Exception
     {
         super.setUp();
-        this.Platform = new Platform();
-        driver = this.Platform.getDriver();
+        driver = Platform.getInstance().getDriver();
         this.rotateScreenPortraite();
+        this.skipWelcomePageForIOSApp();
     }
 
     @Override
@@ -48,6 +49,13 @@ public class CoreTestCase extends TestCase {
     protected void backgroundApp(int seconds)
     {
         driver.runAppInBackground(seconds);
+    }
+
+    private void skipWelcomePageForIOSApp(){
+        if(Platform.getInstance().isIOS()){
+            WelcomePageObject welcomePageObject = new WelcomePageObject(driver);
+            welcomePageObject.clickSkip();
+        }
     }
 
 }

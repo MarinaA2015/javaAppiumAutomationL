@@ -5,6 +5,7 @@ import lib.ui.ArticlePageObject;
 import lib.ui.MyListsPageObject;
 import lib.ui.NavigationUI;
 import lib.ui.SearchPageObject;
+import lib.ui.factories.SearchPageObjectFactory;
 import org.junit.Test;
 
 /**
@@ -19,7 +20,7 @@ public class MyListsTests extends CoreTestCase
         String subtitle = "Object-oriented programming language";
         String name_of_folder = "Learning Programming";
 
-        SearchPageObject searchPageObject = new SearchPageObject(driver);
+        SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);
         searchPageObject.initSearchInput();
         searchPageObject.typeSearchLine(search_line);
         searchPageObject.waitForSearchResult(subtitle);

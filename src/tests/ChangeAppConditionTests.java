@@ -3,6 +3,7 @@ package tests;
 import lib.CoreTestCase;
 import lib.ui.ArticlePageObject;
 import lib.ui.SearchPageObject;
+import lib.ui.factories.SearchPageObjectFactory;
 import org.junit.Test;
 
 /**
@@ -16,7 +17,7 @@ public class ChangeAppConditionTests extends CoreTestCase
         String search_by_text = "Java";
         String article_name = "JavaScript";
 
-        SearchPageObject searchPageObject = new SearchPageObject(driver);
+        SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);
         searchPageObject.initSearchInput();
         searchPageObject.typeSearchLine(search_by_text);
         searchPageObject.waitForSearchResult(article_name);
@@ -51,7 +52,7 @@ public class ChangeAppConditionTests extends CoreTestCase
         String search_by_text = "Java";
         String article_name = "JavaScript";
 
-        SearchPageObject searchPageObject = new SearchPageObject(driver);
+        SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);
         searchPageObject.initSearchInput();
         searchPageObject.typeSearchLine(search_by_text);
         searchPageObject.waitForSearchResult(article_name);

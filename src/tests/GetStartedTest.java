@@ -1,6 +1,7 @@
 package tests;
 
 import lib.CoreTestCase;
+import lib.Platform;
 import lib.iOSTestCase;
 import lib.ui.WelcomePageObject;
 
@@ -11,12 +12,21 @@ public class GetStartedTest extends CoreTestCase
 {
     public void  testPathThroughWelcome()
     {
-        if (this.Platform.isAndroid()) {
+        if (Platform.getInstance().isAndroid()) {
             return;
         }
         WelcomePageObject welcomePage = new WelcomePageObject(driver);
-        welcomePage.waitForLernMoreLink();
+        welcomePage.waitForLearnMoreLink();
         welcomePage.clickNextButton();
-        //......
+
+        welcomePage.waitForNewWayToExploreText();
+        welcomePage.clickNextButton();
+
+        welcomePage.waitForAddOrEditPreferedLangText();
+        welcomePage.clickNextButton();
+
+        welcomePage.waitForLearnMoreAboutDataCollectedText();
+        welcomePage.clickGetStartedButton();
+
     }
 }
