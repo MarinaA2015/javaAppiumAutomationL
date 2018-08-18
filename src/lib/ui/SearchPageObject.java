@@ -12,6 +12,7 @@ abstract public class SearchPageObject extends MainPageObject {
                                 SEARCH_INIT,
                                 SEARCH_INIT_BY_ID,
                                 SEARCH_CANCEL_BUTTON,
+                                SEARCH_CLEAR_BUTTON,
                                 SEARCH_RESULT_BY_SUBSTRING_TPL,
                                 SEARCH_RESULT_ELEMENT,
                                 SEARCH_EMPTY_RESULT_LABEL,
@@ -55,7 +56,11 @@ abstract public class SearchPageObject extends MainPageObject {
 
     public void clickCancelSearch()
     {
-        this.waitForElementAndClick(SEARCH_CANCEL_BUTTON, "Cannot find and cick search cancel button", 5);
+        this.waitForElementAndClick(SEARCH_CANCEL_BUTTON, "Cannot find and click search cancel button", 15);
+    }
+    public void clearSearch()
+    {
+        this.waitForElementAndClick(SEARCH_CLEAR_BUTTON, "Cannot find and click search cancel button", 15);
     }
 
     public void waitForSearchResult(String substring)

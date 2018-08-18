@@ -40,7 +40,7 @@ public class SearchTests extends CoreTestCase
         searchPageObject.typeSearchLine("Java");
         searchPageObject.waitForSearchResult("Object-oriented programming language");
         searchPageObject.waitForCancelButtonToAppear();
-        searchPageObject.clickCancelSearch();
+        searchPageObject.clearSearch();
         searchPageObject.clickCancelSearch();
         searchPageObject.waitForCancelButtonToDisappear();
     }

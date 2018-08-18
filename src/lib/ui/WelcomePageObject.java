@@ -23,7 +23,7 @@ public class WelcomePageObject extends MainPageObject {
 
     public void waitForLearnMoreLink()
     {
-        this.waitForElementNotPresent(STEP_LEARN_MORE_LINK,"Cannot find 'Learn more about Wikipedia' link", 10);
+        this.waitForElementPresent(STEP_LEARN_MORE_LINK,"Cannot find 'Learn more about Wikipedia' link", 10);
     }
 
     public void waitForNewWayToExploreText()
@@ -43,13 +43,13 @@ public class WelcomePageObject extends MainPageObject {
 
     public void clickNextButton()
     {
-        this.waitForElementAndClick(GET_STARTED_BUTTON,"Cannot find and click Get started button", 10);
+        this.waitForElementAndClick(NEXT_LINK,"Cannot find and click Next button", 10);
     }
 
 
     public void clickGetStartedButton()
     {
-        this.waitForElementAndClick(NEXT_LINK,"Cannot find and click Next button", 10);
+        this.waitForElementAndClick(GET_STARTED_BUTTON,"Cannot find and click Get started button", 10);
     }
 
     public void clickSkip(){

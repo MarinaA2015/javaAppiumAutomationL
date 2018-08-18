@@ -2,6 +2,7 @@ package lib;
 
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.android.AndroidDriver;
+import io.appium.java_client.ios.IOSDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.net.URL;
@@ -12,7 +13,7 @@ import java.net.URL;
 public class Platform {
     private static final String PLATFORM_ANDROID = "android";
     private static final String PLATFORM_IOS = "ios";
-    private static final String  APPIUM_URL = "http://127.0.0.1.:4723/wd/hub";
+    private static final String  APPIUM_URL = "http://127.0.0.1:4723/wd/hub";
     private static Platform instance;
 
     private Platform() {}
@@ -29,7 +30,7 @@ public class Platform {
         if (this.isAndroid()){
             return new AndroidDriver(URL, this.getAdroidDesiredCapabilities());
         } else if (this.isIOS()){
-            return  new AndroidDriver(URL, this.getIOSDesiredCapabilities());
+            return  new IOSDriver(URL, this.getIOSDesiredCapabilities());
         } else {
             throw new Exception("Cannot detect type of the Driver. Platform value: " + this.getPlatformVar());
         }
@@ -61,8 +62,8 @@ public class Platform {
         DesiredCapabilities capabilities =new DesiredCapabilities();
         capabilities.setCapability("platformName", "iOS");
         capabilities.setCapability("deviceName", "iPhone SE");
-        capabilities.setCapability("platformVersion", "11.3");
-        capabilities.setCapability("app", "E:/Marina/Tel Ran/QA/JavaSeleniumLocal/javaAppAutomation/apks/Wikipedia.app");
+        capabilities.setCapability("platformVersion", "11.4");
+        capabilities.setCapability("app", "/Users/pavelp/Downloads/Marina/Wikipedia.app");
         return capabilities;
     }
 
