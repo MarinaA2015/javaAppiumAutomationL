@@ -1,10 +1,14 @@
 package tests;
 
 import lib.CoreTestCase;
+import lib.Platform;
 import lib.ui.ArticlePageObject;
 import lib.ui.MyListsPageObject;
 import lib.ui.NavigationUI;
 import lib.ui.SearchPageObject;
+import lib.ui.factories.ArticlePageObjectFactory;
+import lib.ui.factories.MyListPageObjectFactory;
+import lib.ui.factories.NavigationUIFactory;
 import lib.ui.factories.SearchPageObjectFactory;
 import org.junit.Test;
 
@@ -13,12 +17,13 @@ import org.junit.Test;
  */
 public class MyListsTests extends CoreTestCase
 {
+    private static final String name_of_folder = "Learning Programming";
+
     @Test
     public void testSaveNewArticleToMyList()
     {
         String search_line = "Java";
         String subtitle = "Object-oriented programming language";
-        String name_of_folder = "Learning Programming";
 
         SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);
         searchPageObject.initSearchInput();
@@ -26,17 +31,26 @@ public class MyListsTests extends CoreTestCase
         searchPageObject.waitForSearchResult(subtitle);
         searchPageObject.clickByArticleWithSubstring(subtitle);
 
-        ArticlePageObject articlePageObject = new ArticlePageObject(driver);
+        ArticlePageObject articlePageObject = ArticlePageObjectFactory.get(driver);
         String article_title = articlePageObject.getArticleTitle();
 
-        articlePageObject.addArticleToMyList(name_of_folder);
+        if(Platform.getInstance().isAndroid()){
+            articlePageObject.addArticleToMyList(name_of_folder);
+        }else{
+            articlePageObject.addArticleToMySaved();
+        }
+
         articlePageObject.closeArticle();
 
-        NavigationUI navigationUI = new NavigationUI(driver);
+        NavigationUI navigationUI = NavigationUIFactory.get(driver);
+
         navigationUI.clickToMyList();
 
-        MyListsPageObject myListsPageObject = new MyListsPageObject(driver);
+        MyListsPageObject myListsPageObject = MyListPageObjectFactory.get(driver);
+        if(Platform.getInstance().isAndroid())
+        {
         myListsPageObject.openFolderByName(name_of_folder);
+        }
         myListsPageObject.swipeArticleToDelete(article_title);
 
     }
@@ -48,16 +62,15 @@ public class MyListsTests extends CoreTestCase
         String search_by_text2 = "Oracle";
         String article_title1 = "JavaScript";
         String article_title2 = "Oracle Database";
-        String name_of_folder = "Learning Programming";
 
-        MyListsPageObject myListsPageObject = new MyListsPageObject(driver);
+        MyListsPageObject myListsPageObject = MyListPageObjectFactory.get(driver);
         myListsPageObject
                 .searchArticleByTextAndPutToMyList(search_by_text1, article_title1, name_of_folder);
         myListsPageObject
                 .searchArticleByTextAndPutToExistentFolderInMyList(search_by_text2, article_title2, name_of_folder);
 
         // open name_of_folder in My List
-        NavigationUI navigationUI = new NavigationUI(driver);
+        NavigationUI navigationUI = NavigationUIFactory.get(driver);
         navigationUI.clickToMyList();
         myListsPageObject.openFolderByName(name_of_folder);
 
@@ -65,7 +78,7 @@ public class MyListsTests extends CoreTestCase
         myListsPageObject.swipeArticleToDelete(article_title1);
         myListsPageObject.openArticleByTitle(article_title2);
 
-        ArticlePageObject articlePageObject = new ArticlePageObject(driver);
+        ArticlePageObject articlePageObject = ArticlePageObjectFactory.get(driver);
         articlePageObject.waitForTitleElement();
         assertEquals("Article title is not the '" + article_title2 + "'",
                          articlePageObject.getArticleTitle(),

@@ -1,6 +1,7 @@
 package lib.ui;
 
 import io.appium.java_client.AppiumDriver;
+import lib.Platform;
 import org.openqa.selenium.By;
 import org.openqa.selenium.ScreenOrientation;
 import org.openqa.selenium.WebElement;
@@ -8,19 +9,19 @@ import org.openqa.selenium.WebElement;
 /**
  * Created by Inka on 09-Aug-18.
  */
-public class ArticlePageObject extends MainPageObject{
-    private final static String
-                    TITLE = "id:org.wikipedia:id/view_page_title_text",
-                    FOOTER = "xpath://*[@text = 'View page in browser']",
-                    OPTIONS_BUTTON = "xpath://android.widget.ImageView[@content-desc = 'More options']",
-                    OPTION_ADD_TO_MY_READING_LIST_BUTTON = "xpath://*[@text = 'Add to reading list']",
-                    ADD_TO_MY_LIST_OVERLAY = "id:org.wikipedia:id/onboarding_button",
-                    MY_LIST_NAME_INPUT = "id:org.wikipedia:id/text_input",
-                    MY_LIST_OK_BUTTON = "xpath://*[@text = 'OK']",
-                    CLOSE_ARTICLE_BUTTON = "xpath://android.widget.ImageButton[@content-desc = 'Navigate up']",
-                    EXISTENT_FOLDER_BY_NAME_TMPL = "xpath://*[@text = '{FOLDER_NAME}']",
-                    HEADER_PENCIL_ID = "id:org.wikipedia:id/view_page_header_edit_pencil",
-                    ARTICLE_TITE_ID = "id:org.wikipedia:id/view_page_title_text";
+abstract public class ArticlePageObject extends MainPageObject{
+    protected static String
+                    TITLE,
+                    FOOTER,
+                    OPTIONS_BUTTON,
+                    OPTION_ADD_TO_MY_READING_LIST_BUTTON,
+                    ADD_TO_MY_LIST_OVERLAY,
+                    MY_LIST_NAME_INPUT,
+                    MY_LIST_OK_BUTTON,
+                    CLOSE_ARTICLE_BUTTON,
+                    EXISTENT_FOLDER_BY_NAME_TMPL,
+                    HEADER_PENCIL_ID,
+                    ARTICLE_TITE_ID;
 
     public ArticlePageObject(AppiumDriver driver) {
         super(driver);
@@ -38,12 +39,24 @@ public class ArticlePageObject extends MainPageObject{
     public String  getArticleTitle()
     {
         WebElement element = this.waitForTitleElement();
-        return element.getText();
+        if (Platform.getInstance().isAndroid()){
+            return element.getText();
+        }else{
+            return element.getAttribute("name");
+        }
+
     }
 
     public void swipeToFooter()
     {
-        this.swipeUpTllFindElements(FOOTER, "Cannot find the of article", 20);
+        if(Platform.getInstance().isAndroid())
+        {
+            this.swipeUpTllFindElements(FOOTER, "Cannot find the of article", 40);
+        }
+        else
+            {
+                this.swipeUpTillElementAppear(FOOTER, "Cannot find the of article", 40);
+            }
     }
 
     public void addArticleToMyList(String name_of_folder)
@@ -124,5 +137,7 @@ public class ArticlePageObject extends MainPageObject{
                 "title of the article was not found");
     }
 
-
+    public void addArticleToMySaved(){
+        this.waitForElementAndClick(OPTION_ADD_TO_MY_READING_LIST_BUTTON, "cannot find option to add article to reading list", 15);
+    };
 }

@@ -1,17 +1,17 @@
 package lib.ui;
 
 import io.appium.java_client.AppiumDriver;
+import lib.Platform;
+import lib.ui.factories.ArticlePageObjectFactory;
 import lib.ui.factories.SearchPageObjectFactory;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
 
 /**
  * Created by Inka on 11-Aug-18.
  */
-public class MyListsPageObject extends MainPageObject {
-    public static final String
-                        FOLDER_BY_NAME_TPL = "xpath://*[@text = '{FOLDER_NAME}']",
-                        ARTICLE_BY_TITLE_TPL = "xpath://*[@text = '{ARTICLE_TITLE}']";
+abstract public class MyListsPageObject extends MainPageObject {
+    protected static String
+                        FOLDER_BY_NAME_TPL,
+                        ARTICLE_BY_TITLE_TPL;
 
     public MyListsPageObject(AppiumDriver driver) {
         super(driver);
@@ -44,6 +44,9 @@ public class MyListsPageObject extends MainPageObject {
         this.swipeElementToLeft(
                 name_of_article_by_xpath,
                 "cannot find saved article");
+        if(Platform.getInstance().isIOS()){
+            this.clickElementToTheRightUpperCorner(name_of_article_by_xpath, "Cannot find saved article");
+        }
         this.waitForArticleToDisappearByTitle(article_title);
 
     }
@@ -81,7 +84,7 @@ public class MyListsPageObject extends MainPageObject {
         searchPageObject.waitForSearchResult(subtitle);
         searchPageObject.clickByArticleWithSubstring(subtitle);
 
-        ArticlePageObject articlePageObject = new ArticlePageObject(driver);
+        ArticlePageObject articlePageObject = ArticlePageObjectFactory.get(driver);
         String article_title = articlePageObject.getArticleTitle();
 
         articlePageObject.addArticleToMyList(name_of_folder);
@@ -97,7 +100,7 @@ public class MyListsPageObject extends MainPageObject {
         searchPageObject.waitForSearchResult(subtitle);
         searchPageObject.clickByArticleWithSubstring(subtitle);
 
-        ArticlePageObject articlePageObject = new ArticlePageObject(driver);
+        ArticlePageObject articlePageObject = ArticlePageObjectFactory.get(driver);
         String article_title = articlePageObject.getArticleTitle();
 
         articlePageObject.addArticleToExistentFolderInMyList(name_of_folder);

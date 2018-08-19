@@ -3,9 +3,9 @@ package tests;
 import lib.CoreTestCase;
 import lib.ui.ArticlePageObject;
 import lib.ui.SearchPageObject;
+import lib.ui.factories.ArticlePageObjectFactory;
 import lib.ui.factories.SearchPageObjectFactory;
 import org.junit.Test;
-import org.openqa.selenium.By;
 
 /**
  * Created by Inka on 14-Aug-18.
@@ -22,7 +22,7 @@ public class ArticlesTests extends CoreTestCase
         searchPageObject.waitForSearchResult("Object-oriented programming language");
         searchPageObject.clickByArticleWithSubstring("Object-oriented programming language");
 
-        ArticlePageObject articlePageObject = new ArticlePageObject(driver);
+        ArticlePageObject articlePageObject = ArticlePageObjectFactory.get(driver);
 
         String title = articlePageObject.getArticleTitle();
 
@@ -41,7 +41,7 @@ public class ArticlesTests extends CoreTestCase
         searchPageObject.waitForSearchResult("Appium");
         searchPageObject.clickByArticleWithSubstring("Appium");
 
-        ArticlePageObject articlePageObject = new ArticlePageObject(driver);
+        ArticlePageObject articlePageObject = ArticlePageObjectFactory.get(driver);
         articlePageObject.waitForTitleElement();
         articlePageObject.swipeToFooter();
 
@@ -57,7 +57,7 @@ public class ArticlesTests extends CoreTestCase
         searchPageObject.waitForSearchResult("JavaScript");
         searchPageObject.clickByArticleWithSubstring("JavaScript");
 
-        ArticlePageObject articlePageObject = new ArticlePageObject(driver);
+        ArticlePageObject articlePageObject = ArticlePageObjectFactory.get(driver);
         articlePageObject.waitForPencilElementToEditHeader();
         articlePageObject.assertExistsArticleTitle();
 

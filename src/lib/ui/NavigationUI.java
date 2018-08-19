@@ -6,9 +6,9 @@ import org.openqa.selenium.By;
 /**
  * Created by Inka on 11-Aug-18.
  */
-public class NavigationUI extends MainPageObject{
-    private final static String
-            MY_LISTS_LINK = "xpath://android.widget.FrameLayout[@content-desc = 'My lists']";
+abstract public class NavigationUI extends MainPageObject{
+    protected static String
+            MY_LISTS_LINK;
 
 
     public NavigationUI(AppiumDriver driver) {

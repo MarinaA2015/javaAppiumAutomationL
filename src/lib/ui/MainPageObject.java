@@ -2,6 +2,8 @@ package lib.ui;
 
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.TouchAction;
+import lib.Platform;
+import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebElement;
@@ -104,81 +106,23 @@ public class MainPageObject {
 
     }
 
-    /*public void searchArticleAndOpenIt(String search_by_text, String article_name)
-    {
-        waitForElementAndClick(By.id("org.wikipedia:id/search_container"),
-                "Cannot find Search Wikipedia input",
-                5);
 
-        waitForElementAndSendKeys(By.id("org.wikipedia:id/search_src_text"),
-                search_by_text,
-                "Cannot find Search.. input",
-                5);
+    public void swipeUpTillElementAppear(String locator, String error_message, int max_swipes){
+       int already_swiped = 0;
+       while (this.isElementLocatedOnTheScreen(locator)){
+           if(already_swiped > max_swipes){
+               Assert.assertTrue(error_message, this.isElementLocatedOnTheScreen(locator));
+           }
+           swipeUpQuick();
+           ++already_swiped;
 
-        waitForElementAndClick(By.xpath("//*[@resource-id = 'org.wikipedia:id/page_list_item_container']//*[@text = '" + article_name +"']"),
-                "Cannot find " + article_name + " topic searching by" +  search_by_text,
-                15);
-
-        waitForElementPresent(By.id("org.wikipedia:id/view_page_title_text"),
-                "Cannot find article title",
-                30);
-    }*/
-
-   /* public void addingArticleToFirstFolder(String name_of_folder)
-    {
-        waitForElementAndClick(
-                By.xpath("//android.widget.ImageView[@content-desc = 'More options']"),
-                "cannot find button to open article options",
-                5);
-
-        waitForElementAndClick(
-                By.xpath("//*[@text = 'Add to reading list']"),
-                "cannot find option to add article to reading list",
-                5);
-
-
-        waitForElementAndClick(
-                By.id("org.wikipedia:id/onboarding_button"),
-                //By.xpath("//*[@text = 'GOT IT']"),
-                "cannot find 'GOT IT' button",
-                15);
-
-        waitForElementAndClear(
-                By.id("org.wikipedia:id/text_input"),
-                "cannot find input to set name of article folder",
-                15);
-
-        waitForElementAndSendKeys(
-                By.id("org.wikipedia:id/text_input"),
-                name_of_folder,
-                "cannot put text into article folder input",
-                5);
-
-        waitForElementAndClick(
-                By.xpath("//*[@text = 'OK']"),
-                "cannot find OK option ",
-                5);
+       }
     }
-
-    public void addingArticleToExistentFolder(String name_of_folder)
-    {
-        waitForElementAndClick(
-                By.xpath("//android.widget.ImageView[@content-desc = 'More options']"),
-                "cannot find button to open article options",
-                5);
-
-        waitForElementAndClick(
-                By.xpath("//*[@text = 'Add to reading list']"),
-                "cannot find option to add article to reading list",
-                5);
-
-        waitForElementAndClick(
-                By.xpath("//*[@text = '" + name_of_folder + "']"),
-                "cannot find the existent folder with name " + name_of_folder,
-                15);
-
-    }*/
-
+    public boolean isElementLocatedOnTheScreen(String locator){
+        int element_location_by_x = this.waitForElementPresent(locator,"Cannot find element by locator",1).getLocation().getY();
+        int screen_size_by_y = driver.manage().window().getSize().getHeight();
+        return element_location_by_x < screen_size_by_y;
+    }
 
     public void swipeUp(int timeOfSwipe){
         TouchAction action = new TouchAction(driver);
@@ -229,12 +173,16 @@ public class MainPageObject {
         // System.out.println("middle_y: " + middle_y);
 
         TouchAction action = new TouchAction(driver);
-        action
-                .press(right_x,middle_y)
-                .waitAction(300)
-                .moveTo(left_x,middle_y)
-                .release()
-                .perform();
+        action.press(right_x,middle_y);
+        action.waitAction(300);
+        if(Platform.getInstance().isAndroid()){
+            action.moveTo(left_x,middle_y);
+        } else {
+            int offset_x = -1*(element.getSize().getWidth());
+            action.moveTo(offset_x,0);
+        }
+        action.release();
+        action.perform();
 
     }
 
@@ -246,6 +194,7 @@ public class MainPageObject {
     }
     private By getLocatorByString(String locator_with_type)
     {
+
         String[] exploaded_locator = locator_with_type.split(Pattern.quote(":"),2);
         String by_type = exploaded_locator[0];
         String locator = exploaded_locator[1];
@@ -257,5 +206,20 @@ public class MainPageObject {
         } else {
             throw new IllegalArgumentException("Cannot get type of locator: " + locator_with_type);
         }
+    }
+
+    public void clickElementToTheRightUpperCorner(String locator, String error_message)
+    {
+        WebElement element = this.waitForElementPresent(locator + "/..", error_message);
+        int right_x = element.getLocation().getX();
+        int upper_y = element.getLocation().getY();
+        int lower_y = upper_y + element.getSize().getHeight();
+        int middle_y = (upper_y + lower_y)/2;
+        int width = element.getSize().getWidth();
+        int point_to_click_x = (right_x + width) - 3;
+        int point_to_click_y = middle_y;
+
+        TouchAction action = new TouchAction(driver);
+        action.tap(point_to_click_x,point_to_click_x).perform();
     }
 }
