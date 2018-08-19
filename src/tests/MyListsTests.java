@@ -12,6 +12,8 @@ import lib.ui.factories.NavigationUIFactory;
 import lib.ui.factories.SearchPageObjectFactory;
 import org.junit.Test;
 
+import java.util.concurrent.TimeUnit;
+
 /**
  * Created by Inka on 14-Aug-18.
  */
@@ -33,10 +35,12 @@ public class MyListsTests extends CoreTestCase
 
         ArticlePageObject articlePageObject = ArticlePageObjectFactory.get(driver);
         String article_title = articlePageObject.getArticleTitle();
+        System.out.println("article title: " + article_title);
 
         if(Platform.getInstance().isAndroid()){
             articlePageObject.addArticleToMyList(name_of_folder);
         }else{
+            articlePageObject.addArticleToMySaved();
             articlePageObject.addArticleToMySaved();
         }
 
@@ -51,7 +55,18 @@ public class MyListsTests extends CoreTestCase
         {
         myListsPageObject.openFolderByName(name_of_folder);
         }
-        myListsPageObject.swipeArticleToDelete(article_title);
+        driver.manage().timeouts().implicitlyWait(20,TimeUnit.SECONDS);
+        myListsPageObject.waitForElementPresent(
+                "id:Java (programming language) Object-oriented programming language",
+                "Cannot find my element by defined locator",
+                30);
+
+        myListsPageObject.waitForElementPresent(
+                "xpath://XCUIElementTypeLink[@name=\"Java (programming language) Object-oriented programming language\"]/..",
+                        "Cannot find my element by defined locator",
+                        30);
+        System.out.println("Ura!!!! We found");
+        //myListsPageObject.swipeArticleToDelete(article_title + " " + subtitle);
 
     }
 

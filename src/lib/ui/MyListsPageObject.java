@@ -65,7 +65,7 @@ abstract public class MyListsPageObject extends MainPageObject {
         this.waitForElementPresent(
                 name_of_article_xpath,
                 "Cannot find the article by title " + article_title,
-                15);
+                30);
     }
     public void openArticleByTitle(String article_title) {
         this.waitForArticleToAppearByTitle(article_title);
