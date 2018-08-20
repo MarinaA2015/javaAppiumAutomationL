@@ -65,7 +65,7 @@ public class MyListsTests extends CoreTestCase
                 "xpath://XCUIElementTypeLink[@name=\"Java (programming language) Object-oriented programming language\"]/..",
                         "Cannot find my element by defined locator",
                         30);
-        System.out.println("Ura!!!! We found");
+
         //myListsPageObject.swipeArticleToDelete(article_title + " " + subtitle);
 
     }
