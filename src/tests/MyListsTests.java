@@ -25,7 +25,8 @@ public class MyListsTests extends CoreTestCase
     public void testSaveNewArticleToMyList()
     {
         String search_line = "Java";
-        String subtitle = "Object-oriented programming language";
+        //String subtitle = "JavaScript";
+        String subtitle = "Java (programming language)";
 
         SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);
         searchPageObject.initSearchInput();
@@ -55,14 +56,14 @@ public class MyListsTests extends CoreTestCase
         {
         myListsPageObject.openFolderByName(name_of_folder);
         }
-        driver.manage().timeouts().implicitlyWait(20,TimeUnit.SECONDS);
-        myListsPageObject.waitForElementPresent(
-                "id:Java (programming language) Object-oriented programming language",
+        //driver.manage().timeouts().implicitlyWait(40,TimeUnit.SECONDS);
+       /*myListsPageObject.waitForElementPresent(
+                "id:JavaScript Programming language",
                 "Cannot find my element by defined locator",
-                30);
+                30);*/
 
         myListsPageObject.waitForElementPresent(
-                "xpath://XCUIElementTypeLink[@name=\"Java (programming language) Object-oriented programming language\"]/..",
+                "xpath://XCUIElementTypeLink[contains(@name,'programming language'])",
                         "Cannot find my element by defined locator",
                         30);
 
