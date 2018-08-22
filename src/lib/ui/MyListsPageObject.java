@@ -120,7 +120,7 @@ abstract public class MyListsPageObject extends MainPageObject {
         String article_title;
         if(Platform.getInstance().isAndroid()) {
             article_title = articlePageObject.getArticleTitle();
-            articlePageObject.addArticleToMyList(name_of_folder);
+            articlePageObject.addArticleToExistentFolderInMyList(name_of_folder);
         } else{
             article_title = subtitle;
             articlePageObject.waitForTitleElementByTitle(article_title);
