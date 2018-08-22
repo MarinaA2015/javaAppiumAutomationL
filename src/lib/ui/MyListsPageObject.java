@@ -108,16 +108,26 @@ abstract public class MyListsPageObject extends MainPageObject {
         // find and add one article to my folder
         searchPageObject.initSearchInput();
 
-        //!!!!verify in the method type search line if the field is empty
-        searchPageObject.typeSearchLine("");
+        //search input is not empty for ios, so we need to clear it before searching
+        if(Platform.getInstance().isIOS()) {
+        searchPageObject.clearSearch();
+        }
         searchPageObject.typeSearchLine(text);
         searchPageObject.waitForSearchResult(subtitle);
         searchPageObject.clickByArticleWithSubstring(subtitle);
 
         ArticlePageObject articlePageObject = ArticlePageObjectFactory.get(driver);
-        String article_title = articlePageObject.getArticleTitle();
+        String article_title;
+        if(Platform.getInstance().isAndroid()) {
+            article_title = articlePageObject.getArticleTitle();
+            articlePageObject.addArticleToMyList(name_of_folder);
+        } else{
+            article_title = subtitle;
+            articlePageObject.waitForTitleElementByTitle(article_title);
+            //articlePageObject.addArticleToMySaved();
+            articlePageObject.addArticleToMySaved();
+        }
 
-        articlePageObject.addArticleToExistentFolderInMyList(name_of_folder);
         articlePageObject.closeArticle();
         return article_title;
     }

@@ -41,6 +41,10 @@ abstract public class ArticlePageObject extends MainPageObject{
         return this.waitForElementPresent(title_id, "Cannot find element by title", 25);
 
     }
+    public void assertTitleElementPresent(String article_title, String error_message){
+        String title_id = TITLE.replace("{ARTICLE}",article_title);
+        this.assertElementPresent(title_id, error_message);
+    }
 
     public String  getArticleTitle()
     {

@@ -92,17 +92,26 @@ public class MyListsTests extends CoreTestCase
         // open name_of_folder in My List
         NavigationUI navigationUI = NavigationUIFactory.get(driver);
         navigationUI.clickToMyList();
-        myListsPageObject.openFolderByName(name_of_folder);
+        if(Platform.getInstance().isAndroid())
+        {
+            myListsPageObject.openFolderByName(name_of_folder);
+        }
 
         // delete the first article using swipe
         myListsPageObject.swipeArticleToDelete(article_title1);
         myListsPageObject.openArticleByTitle(article_title2);
 
         ArticlePageObject articlePageObject = ArticlePageObjectFactory.get(driver);
-        articlePageObject.waitForTitleElement();
-        assertEquals("Article title is not the '" + article_title2 + "'",
-                         articlePageObject.getArticleTitle(),
-                         article_title2);
+        if(Platform.getInstance().isAndroid()) {
+            articlePageObject.waitForTitleElement();
+            assertEquals("Article title is not the '" + article_title2 + "'",
+                    articlePageObject.getArticleTitle(),
+                    article_title2);
+        }
+        else{
+            articlePageObject.waitForTitleElementByTitle(article_title2);
+            articlePageObject.assertTitleElementPresent(article_title2, "Article title is not the '" + article_title2 + "'");
+        }
 
     }
 
