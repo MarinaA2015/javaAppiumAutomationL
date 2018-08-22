@@ -220,6 +220,6 @@ public class MainPageObject {
         int point_to_click_y = middle_y;
 
         TouchAction action = new TouchAction(driver);
-        action.tap(point_to_click_x,point_to_click_x).perform();
+        action.tap(point_to_click_x,point_to_click_y).perform();
     }
 }

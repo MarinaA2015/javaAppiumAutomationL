@@ -62,12 +62,14 @@ public class MyListsTests extends CoreTestCase
                 "Cannot find my element by defined locator",
                 30);*/
 
-        myListsPageObject.waitForElementPresent(
-                "xpath://XCUIElementTypeLink[contains(@name,'programming language'])",
+        /*myListsPageObject.waitForElementPresent(
+                "xpath://XCUIElementTypeLink[contains(@name,'programming language')]",
                         "Cannot find my element by defined locator",
-                        30);
+                        30);*/
 
-        //myListsPageObject.swipeArticleToDelete(article_title + " " + subtitle);
+
+
+        myListsPageObject.swipeArticleToDelete(article_title);
 
     }
 

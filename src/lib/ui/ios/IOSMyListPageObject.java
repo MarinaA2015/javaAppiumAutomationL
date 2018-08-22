@@ -9,7 +9,7 @@ import lib.ui.MyListsPageObject;
 public class IOSMyListPageObject extends MyListsPageObject{
     static {
         //ARTICLE_BY_TITLE_TPL = "xpath://XCUIElementTypeLink[@name='{ARTICLE_TITLE}']";
-        ARTICLE_BY_TITLE_TPL ="xpath://XCUIElementTypeLink[@name=\"Java (programming language) Object-oriented programming language\"]/..";
+        ARTICLE_BY_TITLE_TPL ="xpath://XCUIElementTypeLink[contains(@name,'{ARTICLE_TITLE}')]";
     }
     public IOSMyListPageObject(AppiumDriver driver){
         super(driver);
