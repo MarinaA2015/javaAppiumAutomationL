@@ -8,7 +8,7 @@ import lib.ui.ArticlePageObject;
  */
 public class IOSArticlePageObject extends ArticlePageObject{
     static {
-                TITLE = "id:Java (programming language)";
+                TITLE = "id:{ARTICLE}";
                 FOOTER = "id:View article in browser";
                 OPTION_ADD_TO_MY_READING_LIST_BUTTON = "id:Save for later";
                 MY_LIST_NAME_INPUT = "id:org.wikipedia:id/text_input";

@@ -36,7 +36,7 @@ public class MyListsTests extends CoreTestCase
 
         ArticlePageObject articlePageObject = ArticlePageObjectFactory.get(driver);
         String article_title = articlePageObject.getArticleTitle();
-        System.out.println("article title: " + article_title);
+       // System.out.println("article title: " + article_title);
 
         if(Platform.getInstance().isAndroid()){
             articlePageObject.addArticleToMyList(name_of_folder);
@@ -84,6 +84,8 @@ public class MyListsTests extends CoreTestCase
         MyListsPageObject myListsPageObject = MyListPageObjectFactory.get(driver);
         myListsPageObject
                 .searchArticleByTextAndPutToMyList(search_by_text1, article_title1, name_of_folder);
+
+        //necessary to clean the search
         myListsPageObject
                 .searchArticleByTextAndPutToExistentFolderInMyList(search_by_text2, article_title2, name_of_folder);
 

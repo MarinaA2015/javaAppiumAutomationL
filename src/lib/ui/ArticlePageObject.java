@@ -36,6 +36,12 @@ abstract public class ArticlePageObject extends MainPageObject{
         return this.waitForElementPresent(TITLE, "Cannot find element by title", 25);
     }
 
+    public WebElement waitForTitleElementByTitle(String article_title){
+        String title_id = TITLE.replace("{ARTICLE}",article_title);
+        return this.waitForElementPresent(title_id, "Cannot find element by title", 25);
+
+    }
+
     public String  getArticleTitle()
     {
         WebElement element = this.waitForTitleElement();
